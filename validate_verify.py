@@ -1669,3 +1669,6 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
   checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
   checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  findingsLastRow = verifyFindingSheet.row_count()
+  verifyFindingSheet.delete_rows(findingsLastRow + 5, 100000)
+
