@@ -380,7 +380,7 @@ def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
-      checkRpPeriod ('GHT,Worksite HE sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', row, rpMth, rpYr)
       checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet', row, personCode, providerType)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet sheet', row, vc, rhc, sc, vname, vow)
       
@@ -461,7 +461,7 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Location is not worksite but type of worksite is mentioned"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
-      checkRpPeriod ('LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
       
     if len(llinCheck) > 0:
@@ -515,7 +515,7 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Distributed LLIN is more than pregnant women attended"
         ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
         
-      checkRpPeriod ('LLIN dist(ANC) sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', row, rpMth, rpYr)
       
     if len(ancCheck) > 0:
       verifyFindingSheet.append_rows(ancCheck)
@@ -552,7 +552,7 @@ def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
         llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr])
 
-      checkRpPeriod ('LLIN dist(Other) sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', row, rpMth, rpYr)
       
     if len(llinOtherCheck) > 0:
       verifyFindingSheet.append_rows(llinOtherCheck)
@@ -597,9 +597,9 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Incomplete data"
         recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
-      checkRpPeriod ('Recruitment sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Recruitment sheet', row, rpMth, rpYr)
       if vc!= '':
-        checkVC('Recruitment sheet', row, vc, rhc,sc,vname)
+        checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Recruitment sheet', row, vc, rhc,sc,vname)
       
     if len(recruitCheck) > 0:
       verifyFindingSheet.append_rows(recruitCheck)
@@ -641,7 +641,7 @@ def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
         c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr])
 
-      checkRpPeriod ('C19 material distribution sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', row, rpMth, rpYr)
       
     if len(c19Check) > 0:
       verifyFindingSheet.append_rows(c19Check)
@@ -682,7 +682,7 @@ def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
         iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr])
 
-      checkRpPeriod ('IEC,material distribution sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', row, rpMth, rpYr)
       
     if len(iecCheck) > 0:
       verifyFindingSheet.append_rows(iecCheck)
@@ -716,7 +716,7 @@ def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Do not need to report this activity by State/Region or Township team. This is URC central logistic team's activity"
         commoCheck.append([mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr])
 
-      checkRpPeriod ('RDT,ACT,CQ,PQ distribution sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', row, rpMth, rpYr)
       
     if len(commoCheck) > 0:
       verifyFindingSheet.append_rows(commoCheck)
@@ -749,7 +749,7 @@ def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Do not need to report this activity by State/Region or Township team. This is URC and Partner central teams' activity"
         procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
 
-      checkRpPeriod ('procurement sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'procurement sheet', row, rpMth, rpYr)
       
     if len(procureCheck) > 0:
       verifyFindingSheet.append_rows(procureCheck)
@@ -783,7 +783,7 @@ def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = "row - " + str(row) + " | Incomplete data"
           cboCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
 
-      checkRpPeriod ('CBO,CSG,EHO support sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', row, rpMth, rpYr)
       
     if len(cboCheck) > 0:
       verifyFindingSheet.append_rows(cboCheck)
@@ -819,7 +819,7 @@ def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = "row - " + str(row) + " | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -853,7 +853,6 @@ def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, dat
         if org == '' or sr == '' or tsp == '' or wpNum == '' or activity == '' or sDate == '' or status == '':
           checkStr = "row - " + str(row) + " | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
-      # checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -887,8 +886,6 @@ def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if (vBy != '' or vTo != '') and (org == '' or sr == '' or tsp == '' or wpNum == '' or activity == '' or vBy == '' or vTo == '' or date == '' or duration == '' or detail == ''):
         checkStr = "row - " + str(row) + " | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
-
-      # checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -942,7 +939,7 @@ def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      # checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1041,7 +1038,7 @@ def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Other visit - Stockout data reported without mentioning the visit. (" + personCode + ")" 
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1118,7 +1115,7 @@ def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = "row - " + str(row) + " | " + personCode + " received full package of Diagnosis and case management and has not been reported as PMI indicator. Suggested to report as PMI indicator or change 'full' to 'partial'" 
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1171,7 +1168,7 @@ def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
     if len(check) > 0:
@@ -1208,7 +1205,7 @@ def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
     if len(check) > 0:
@@ -1371,7 +1368,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = "row - " + str(row) + " | Incomplete data - DOT section"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod(nameOfSheet + ' sheet', row, rpMth, rpYr)
+      checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
       if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and (org != 'NMCP' or org != 'NMCP/URC' or org != 'URC/NMCP'):
         providerPostCode = rpBy[:-2]
