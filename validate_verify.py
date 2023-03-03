@@ -76,7 +76,15 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if removedDate != '' and removedReason == '':
         villageCheckString = "Removed reason must be mentioned (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
-      
+        
+      if removedDate == '' and removedReason != '' and status != 'Removed':
+        villageCheckString = "Village/worksite is under implementation but removed reason is mentioned (" + vc + ")"
+        allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
+        
+      if removedDate == '' and removedReason != '' and status == 'Removed':
+        villageCheckString = "Village/worksite is removed from project area but removed date is not mentioned (" + vc + ")"
+        allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
+              
       if removedDate != '' and status != 'Removed':
         villageCheckString = "Village was removed on " + removedDate + ". Status must be 'Removed'. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
@@ -135,9 +143,13 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           activeProvider += 1
         
         if removedDate !="" and allProviderData[providerPost][person]['Reason_for_removal'] == '':
-          providerCheckString = "There are more than 1 active provider for the same provider post code (" + providerPost + ")"
+          providerCheckString = "Provider removed without mentioning the reason (" + providerPost + ")"
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
         
+        if removedDate =="" and allProviderData[providerPost][person]['Reason_for_removal'] != '':
+          providerCheckString = "Provider is active but reason for removel is mentioned. (" + providerPost + ")"
+          allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
+            
         if removedDate == "" and allProviderData[providerPost][person]['Type_of_provider'] != "GP" and allProviderData[providerPost][person]['Type_of_provider'] != "PMI-EM Township level team" and \
           (allProviderData[providerPost][person]['Township'] == '' or  allProviderData[providerPost][person]['Type_of_provider'] == '' or \
             allProviderData[providerPost][person]['Included_in_PMI_indicator_(Y/N)'] == '' or  allProviderData[providerPost][person]['ICMV_(Y/N)'] == '' or  allProviderData[providerPost][person]['Name_Of_Provider'] == '' or \
