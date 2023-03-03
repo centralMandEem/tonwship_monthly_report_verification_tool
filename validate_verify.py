@@ -22,7 +22,7 @@ def convert2float(data):
   return newD
 
 # Checking All_villages sheet
-def checkAllVillagesSheet(data):
+def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   allVillData = data['All_villages']['data']
   allProviderData = data['All_provider']['data']
   # print(json.dumps(allVillData, indent=4))
@@ -114,7 +114,7 @@ def checkAllVillagesSheet(data):
 
 
 # Checking All_provider sheet
-def checkAllProviderSheet(data):
+def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   allProviderData = data['All_provider']['data']
   allProviderCheck = []
   if len(allProviderData) > 0:
@@ -148,7 +148,7 @@ def checkAllProviderSheet(data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'All_provider sheet','No data']])
 
 # checking reporting period
-def checkRpPeriod(shName, row, rpMth, rpYr):
+def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpMth, rpYr):
   if rpYr == '2023' and (rpMth == 'October' or rpMth == 'November' or rpMth == 'December'):
     checkStr = "row - " + str(row) + " | Future reporting period found (" + rpMth + " " + rpYr + ")"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
@@ -157,8 +157,8 @@ def checkRpPeriod(shName, row, rpMth, rpYr):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking village code, rhc, sc, village name
-def checkVC(shName, row, vc, rhc, sc, vname, vow=None):
-  vilData = sheetList['All_villages']['data']
+def checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, vc, rhc, sc, vname, vow=None):
+  vilData = data['All_villages']['data']
   if vc!= '' and len(vc) != 12:
     checkStr = "row - " + str(row) + " | Village code format error"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
@@ -172,8 +172,8 @@ def checkVC(shName, row, vc, rhc, sc, vname, vow=None):
       verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking personCode and type of provider
-def checkProviderType(shName, row, personCode, providerType):
-  providerData = sheetList['All_provider']['data']
+def checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, personCode, providerType):
+  providerData = data['All_provider']['data']
   if personCode != '' and len(personCode) != 9:
     checkStr = "row - " + str(row) + " | Person code format error"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
@@ -183,7 +183,7 @@ def checkProviderType(shName, row, personCode, providerType):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking Potential malaria outbreak sheet
-def checkPMO(data):  
+def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
   pmoData = data['Potential malaria outbreak']['data']
   dataStartRow = int(data['Potential malaria outbreak']['headerRow']) + 1
   pmoCheck = []
@@ -220,8 +220,8 @@ def checkPMO(data):
         checkStr = "row - " + str(row) + " | Incomplete data. Outbreak occur and start date not mentioned."
         pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
 
-      checkRpPeriod ('Potential malaria outbreak sheet', row, rpMth, rpYr)
-      checkVC('Potential malaria outbreak sheet', row, vc, rhc, sc, vname)   
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)   
 
     if len(pmoCheck) > 0:
       verifyFindingSheet.append_rows(pmoCheck)
@@ -231,7 +231,7 @@ def checkPMO(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr]])
 
-def checkPLA(data):
+def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
   plaData = data["PLA session"]['data']
   # print(json.dumps(plaData, indent=4))
@@ -286,8 +286,8 @@ def checkPLA(data):
         checkStr = "row - " + str(row) + " | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
-      checkRpPeriod ('Potential malaria outbreak sheet', row, rpMth, rpYr)
-      checkVC('Potential malaria outbreak sheet', row, vc, rhc, sc, vname)    
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)    
       
     if len(plaCheck) > 0:
       verifyFindingSheet.append_rows(plaCheck)
@@ -297,7 +297,7 @@ def checkPLA(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr]])
 
-def checkIpcAdditional(data):  
+def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
   ipcData = data["IPC_additional"]['data']
   # print(json.dumps(ipcData, indent=4))
   dataStartRow = int(data['IPC_additional']['headerRow']) + 1
@@ -329,7 +329,7 @@ def checkIpcAdditional(data):
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
 
       checkRpPeriod ('IPC_additional sheet', row, rpMth, rpYr)
-      checkProviderType('IPC_additional sheet', row, personCode, providerType)
+      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'IPC_additional sheet', row, personCode, providerType)
       
     if len(ipcCheck) > 0:
       verifyFindingSheet.append_rows(ipcCheck)
@@ -339,7 +339,7 @@ def checkIpcAdditional(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr]])
 
-def checkGhtWsHe(data):
+def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ghtData = data["GHT,Worksite HE"]['data']
   # print(json.dumps(ghtData, indent=4))
   dataStartRow = int(data['GHT,Worksite HE']['headerRow']) + 1
@@ -381,8 +381,8 @@ def checkGhtWsHe(data):
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
       checkRpPeriod ('GHT,Worksite HE sheet', row, rpMth, rpYr)
-      checkProviderType('GHT,Worksite HE sheet', row, personCode, providerType)
-      checkVC('GHT,Worksite HE sheet sheet', row, vc, rhc, sc, vname, vow)
+      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet', row, personCode, providerType)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet sheet', row, vc, rhc, sc, vname, vow)
       
     if len(ghtCheck) > 0:
       verifyFindingSheet.append_rows(ghtCheck)
@@ -392,7 +392,7 @@ def checkGhtWsHe(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr]])
 
-def checkLlinDistMassCont(data):
+def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinData = data["LLIN dist(mass,continuous)"]['data']
   # print(json.dumps(llinData, indent=4))
   dataStartRow = int(data['LLIN dist(mass,continuous)']['headerRow']) + 1
@@ -462,7 +462,7 @@ def checkLlinDistMassCont(data):
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
       checkRpPeriod ('LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
-      checkVC('LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
       
     if len(llinCheck) > 0:
       verifyFindingSheet.append_rows(llinCheck)
@@ -472,7 +472,7 @@ def checkLlinDistMassCont(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr]])
 
-def checkLlinAnc(data):
+def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ancData = data["LLIN dist(ANC)"]['data']
   # print(json.dumps(ancData, indent=4))
   dataStartRow = int(data['LLIN dist(ANC)']['headerRow']) + 1
@@ -525,7 +525,7 @@ def checkLlinAnc(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr]])
 
-def checkLlinOther(data):
+def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinOtherData = data["LLIN dist(Other)"]['data']
   # print(json.dumps(llinOtherData, indent=4))
   dataStartRow = int(data['LLIN dist(Other)']['headerRow']) + 1
@@ -562,7 +562,7 @@ def checkLlinOther(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr]])
 
-def checkRecruitment(data):
+def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   recruitData = data["Recruitment"]['data']
   # print(json.dumps(recruitData, indent=4))
@@ -609,7 +609,7 @@ def checkRecruitment(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr]])
 
-def checkC19(data):
+def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   c19Data = data["C19 material distribution"]['data']
   # print(json.dumps(c19Data, indent=4))
@@ -651,7 +651,7 @@ def checkC19(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr]])
 
-def checkIecDist(data):
+def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   iecData = data["IEC,material distribution"]['data']
   # print(json.dumps(iecData, indent=4))
@@ -692,7 +692,7 @@ def checkIecDist(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr]])
 
-def checkCommodityDist(data):
+def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   commoData = data["RDT,ACT,CQ,PQ distribution"]['data']
   # print(json.dumps(commoData, indent=4))
@@ -726,7 +726,7 @@ def checkCommodityDist(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr]])
 
-def checkProcurement(data):
+def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   procureData = data["procurement"]['data']
   # print(json.dumps(procureData, indent=4))
@@ -759,7 +759,7 @@ def checkProcurement(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr]])
 
-def checkCboSupport(data):
+def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   cboData = data["CBO,CSG,EHO support"]['data']
   # print(json.dumps(cboData, indent=4))
@@ -793,7 +793,7 @@ def checkCboSupport(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr]])
 
-def checkDesignDevelop(data):
+def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   nameOfSheet = "Design,develop"
   resData = data[nameOfSheet]['data']
@@ -829,7 +829,7 @@ def checkDesignDevelop(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkStudyAssessmentSurvey(data):
+def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   nameOfSheet = "Study,assessment,survey"
   resData = data[nameOfSheet]['data']
@@ -863,7 +863,7 @@ def checkStudyAssessmentSurvey(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkVisit(data):
+def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   nameOfSheet = "visits"
   resData = data[nameOfSheet]['data']
@@ -898,7 +898,7 @@ def checkVisit(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkTMW(data):
+def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   nameOfSheet = "Training,Meeting,Workshop"
   resData = data[nameOfSheet]['data']
@@ -952,7 +952,7 @@ def checkTMW(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkMSS(data):
+def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   providerData = data["All_provider"]['data']
   nameOfSheet = "Meeting,supervision,stockout"
@@ -1051,7 +1051,7 @@ def checkMSS(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkTrainingProvider(data):
+def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   providerData = data["All_provider"]['data']
   nameOfSheet = "Training attendance (Provider)"
@@ -1129,7 +1129,7 @@ def checkTrainingProvider(data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
   verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Training PMI indicator summary sheet', 'Please check it manually']])
 
-def checkCsg(data):
+def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "CSG"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
@@ -1172,7 +1172,7 @@ def checkCsg(data):
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(nameOfSheet + " sheet", row, vc, rhc, sc,vname)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1182,7 +1182,7 @@ def checkCsg(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkCsgSmallGrant(data):
+def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "CSG (small grant)"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
@@ -1209,7 +1209,7 @@ def checkCsgSmallGrant(data):
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(nameOfSheet + " sheet", row, vc, rhc, sc,vname)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1219,7 +1219,7 @@ def checkCsgSmallGrant(data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
-def checkIcmvOtherDisease(data):
+def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "ICMV other disease"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
@@ -1264,7 +1264,7 @@ def checkIcmvOtherDisease(data):
         checkStr = "row - " + str(row) + " | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkProviderType(nameOfSheet + ' sheet', row, personCode, providerType)
+      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet', row, personCode, providerType)
       
     if len(check) > 0:
       verifyFindingSheet.append_rows(check)
@@ -1276,7 +1276,7 @@ def checkIcmvOtherDisease(data):
   verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Waste disposal sheet', 'Please check manually']])
   verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Expired drug sheet', 'Please check manually']])
 
-def checkPatientRecord(data):
+def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
   providerData = data['All_provider']['data']
   nameOfSheet = "Patient record"
@@ -1372,10 +1372,10 @@ def checkPatientRecord(data):
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod(nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
+      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
       if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and (org != 'NMCP' or org != 'NMCP/URC' or org != 'URC/NMCP'):
-        providerPostCode = personCode[:-2]
-        providerVc = providerData[providerPostCode][personCode]['Assigned_village_code']
+        providerPostCode = rpBy[:-2]
+        providerVc = providerData[providerPostCode][rpBy]['Assigned_village_code']
         if providerVc != '':
           providerRhc = vilData[providerVc]['RHC_Name']
           providerSc = vilData[providerVc]['Sub-center_Name']
@@ -1460,28 +1460,28 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   sheetList['All_provider']['data'] = allProviderDataTmp
   allProviderDataTmp = None
 
-  checkAllVillagesSheet(sheetList)
-  checkAllProviderSheet(sheetList)
-  checkPMO(sheetList)
-  checkPLA(sheetList)
-  checkIpcAdditional(sheetList)
-  checkGhtWsHe(sheetList)
-  checkLlinDistMassCont(sheetList)
-  checkLlinAnc(sheetList)
-  checkLlinOther(sheetList)
-  checkRecruitment(sheetList)
-  checkC19(sheetList)
-  checkIecDist(sheetList)
-  checkCommodityDist(sheetList)
-  checkProcurement(sheetList)
-  checkCboSupport(sheetList)
-  checkDesignDevelop(sheetList)
-  checkStudyAssessmentSurvey(sheetList)
-  checkVisit(sheetList)
-  checkTMW(sheetList)
-  checkMSS(sheetList)
-  checkTrainingProvider(sheetList)
-  checkCsg(sheetList)
-  checkCsgSmallGrant(sheetList)
-  checkIcmvOtherDisease(sheetList)
-  checkPatientRecord(sheetList)
+  checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
