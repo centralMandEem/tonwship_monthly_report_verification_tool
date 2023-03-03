@@ -525,16 +525,16 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if llinAmtNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or rhc == '' or sc == '' or hh == '' or pop == '' or \
                           distMth == '' or distYr == '' or pregAttend == '' or pregTest == '' or pregPos == ''):
         checkStr = "row - " + str(row) + " | Incomplete data"
-        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
+        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
       
       if llinAmtNum <= 0 and (rhc != '' or sc != '' or vname != '' or hh != '' or pop != '' or \
                           distMth != '' or distYr != '' or pregAttend != '' or pregTest != '' or pregPos != ''):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
-        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
+        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
       
       if llinAmtNum > 0 and llinAmtNum > pregAttendNum:
         checkStr = "row - " + str(row) + " | Distributed LLIN is more than pregnant women attended"
-        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
+        ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
         
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', row, rpMth, rpYr)
       
