@@ -1376,7 +1376,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         if org == '' or sr == '' or tsp == '' or providerType == '' or rpBy == '' or activity == '' or cblRhc == '' or cblSc == '' or cblAddr == '' or cblMth == '' or cblYr == '' or cblPg == '' or cblRow == '' or \
             vc == '' or rhc == '' or sc == '' or rpMth == '' or rpYr == '' or date == '' or name == '' or age == '' or vname == '' or popType == '' or sex == '' or testType == '' or numVisit == '' or testResult == '' or \
             pvNpv == '' or deBy == '':
-          checkStr = "row - " + str(row) + " | Incomplete data - Negative patient"
+          checkStr = "row - " + str(row) + " | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if preg != '' and sex != 'F':
           checkStr = "row - " + str(row) + " | Pregnant but not female"
