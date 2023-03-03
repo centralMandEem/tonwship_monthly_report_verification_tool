@@ -431,7 +431,7 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       sc = llin["Subcenter"]
       vname = llin["Village name"]
       vow = llin["Village/Worksite"]
-      wType = llin["Type\n(If worksite, mention the \"type of worksite\". If village, fill \"-\")"]
+      wType = llin["Type\n(If worksite, mention the \"type of worksite\". If village, fill \"-\")"].replace("-","")
       wType = wType.replace("-","")
       hhPresent = llin["# of HH Present"]
       hhCovered = llin["# of HH covered by LLIN"]
