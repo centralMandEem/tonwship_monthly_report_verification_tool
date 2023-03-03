@@ -94,13 +94,11 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if removedDate == '':
         checkProvider = "N"
         postCodes = list(allProviderData.keys())
-        # print(postCodes)
-        # print(len(postCodes))
-        for x in range(len(postCodes)):
-          for personCode in allProviderData[postCodes[x]]:
-            if allProviderData[postCodes[x]][personCode]['Removed_date'] == '' and allProviderData[postCodes[x]][personCode]['Assigned_village_code'] == vc:
+        for postCode in allProviderData:
+          for personCode in allProviderData[postCode]:
+            if allProviderData[postCode][personCode]['Removed_date'] == '' and allProviderData[postCode][personCode]['Assigned_village_code'] == vc:
               checkProvider = "Y"
-              x = len(postCodes) + 100
+              break        
         if checkProvider != provider:
           villageCheckString = "VMW/PP_(Y/N) is not consistent with All_provider sheet. (" + vc + ")"
           allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
