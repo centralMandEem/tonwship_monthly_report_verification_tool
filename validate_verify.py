@@ -12,6 +12,16 @@ gc = gspread.authorize(creds)
 # -------------------------------------------------------------------
 from pandas.core.arrays.string_ import FloatingDtype
 # Define functions
+# Function to convert column alphabet to column index
+def col_to_num(col_str):
+    """ Convert base26 column string to number. """
+    expn = 0
+    col_num = 0
+    for char in reversed(col_str):
+        col_num += (ord(char) - ord('A') + 1) * (26 ** expn)
+        expn += 1
+    return col_num
+
 # Function to convert string to number
 def convert2float(data):
   try:
@@ -1405,6 +1415,77 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     checkStr = "No data"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
+def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, ddRule, nRule, dRule):
+  for sheetName in allData:
+    if sheetName != 'All_villages' and sheetName != 'All_provider':
+      data = allData[sheetName]['data']
+      dataStartRow = int(allData[sheetName]['headerRow']) + 1
+    elif sheetName == 'All_villages':
+      # print(json.dumps(allData[sheetName],indent=4))
+      data = []
+      for vilData in allData[sheetName]['data']:
+        data.append(allData[sheetName]['data'][vilData])
+      dataStartRow = 2
+    elif sheetName == 'All_provider':
+      data = []
+      for postCode in allData[sheetName]['data']:
+        for personCode in allData[sheetName]['data'][postCode]:
+          data.append(allData[sheetName]['data'][postCode][personCode])
+      dataStartRow = 3
+    check = []
+    for row, rowData in enumerate(data, start = dataStartRow):
+      if (sheetName == 'All_villages' or sheetName == 'All_provider'):
+        if rowData['Removed_date'] != '':
+          continue
+      # print(data)
+      # print(rowData)
+      for headText in rowData:
+        if rowData[headText] != '':
+          # Checking dropdown validation
+          if sheetName in ddRule:
+            if headText in ddRule[sheetName]:
+              ddList = ddRule[sheetName][headText]['list']
+              # print(sheetName + " | " + headText + " | " + str(rowData[headText]))
+              value2check = str(rowData[headText]).replace(",","")
+              if not value2check in ddList:
+                checkStr = "row - " + str(row) + " | Dropdown data validation check - invalid data in " + headText + " column. Current value - " + rowData[headText]
+                check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
+          
+          # Checking number validation
+          if sheetName in nRule:
+            if headText in nRule[sheetName]:
+              nValue = float(nRule[sheetName][headText]['list'][0])
+              nvalue2check = str(rowData[headText]).replace(",",'')
+              try:
+                numV2C = float(nvalue2check)
+              except:
+                numV2C = -10.0
+              
+              if numV2C < nValue:
+                checkStr = "row - " + str(row) + " | Number validation check - invalid data in " + headText + " column. Current value - " + str(nvalue2check) + ". Value must be >= " + str(nValue)
+                check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
+
+          # Check date validation
+          if sheetName in dRule:
+            if headText in dRule[sheetName]:
+              dValue = dRule[sheetName][headText]['list'][0]
+              dvalue2check = rowData[headText]
+              try:
+                dV2C = datetime.strptime(dvalue2check, '%m/%d/%Y')
+              except:
+                try:
+                  dV2C = datetime.strptime(dvalue2check, '%d-%b-%Y')
+                except:
+                  dV2C = datetime.strptime('1/1/1900', '%m/%d/%Y')
+              
+              if dV2C < dValue:
+                checkStr = "row - " + str(row) + " | Date validation check - invalid data in " + headText + " column. Current value - " + str(dvalue2check) + ". Value must be on or after " + dValue.strftime("%d-%b-%Y")
+                check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
+
+    if len(check) > 0:      
+        verifyFindingSheet.append_rows(check)
+    else:
+        verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK']])
 
 def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   # -----------------------------------------------------------------------------
@@ -1413,12 +1494,24 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
 
   verificationFile = gc.open_by_url(url_of_verification_file)
-  verifyFindingSheet = verificationFile.worksheet('Findings')
-  verifyFindingSheet.clear()
+  rpFile = gc.open_by_url(url_of_report_file)
   fixTool = gc.open_by_url(url_of_fix_tool)
-  fixTool_tblHeader = fixTool.worksheet('tbl_header')
 
-  sheetListTmp = fixTool_tblHeader.get_all_records()
+  verifyFindingSheet = verificationFile.worksheet('Findings')
+  rpVar = rpFile.worksheet('var')
+  fixToolDvDropDown = fixTool.worksheet('dv_dropdown')
+  fixToolNum = fixTool.worksheet('dv_number')
+  fixToolDate = fixTool.worksheet('dv_date')
+  fixToolTblHeader = fixTool.worksheet('tbl_header')
+  headers = fixToolTblHeader.get_all_records()
+  dvRules = fixToolDvDropDown.get_all_records()
+  numRules = fixToolNum.get_all_records()
+  dateRules = fixToolDate.get_all_records()
+
+  verifyFindingSheet.clear()
+  verifyFindingSheet.update("A1:E1",[["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
+
+  sheetListTmp = headers
   sheetListTmp
   sheetList = {}
   for sheetData in sheetListTmp:
@@ -1471,6 +1564,72 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
         allProviderDataTmp[providerPostCode][personCode] = providerData
   sheetList['All_provider']['data'] = allProviderDataTmp
   allProviderDataTmp = None
+
+
+  tmpHeader = {}
+  for header in headers:
+    if header['Target sheet'] != 'End':
+      if not header['Target sheet'] in tmpHeader:
+        tmpHeader[header['Target sheet']] ={}
+      tmpHeader[header['Target sheet']][str(header['Target column'])] = header['Heading text']
+  headers = tmpHeader
+  tmpHeader = None
+
+  tmpRule = rpVar.get("H2:H")
+  # print(tmpRule)
+  dRule = {}
+  for dateRule in dateRules:
+    sheet = dateRule['Target Sheet']
+    targetColIndex = str(col_to_num(dateRule['Target column']))
+    heading = headers[sheet][targetColIndex]
+    if not sheet in dRule:
+      dRule[sheet] = {}
+    dateValue = ''
+    try:
+      dateValue = datetime.strptime(dateRule['value1'], '%-m/%-d/%Y')
+    except:
+      dateValue = datetime.strptime('01/01/2000', '%m/%d/%Y')
+    
+    dRule[sheet][heading] = {}
+    dRule[sheet][heading]['list'] = [dateValue]
+
+  nRule = {}
+  for numRule in numRules:
+    sheet = numRule['Target Sheet']
+    targetColIndex = str(col_to_num(numRule['Target column']))
+    heading = headers[sheet][targetColIndex]
+    if not sheet in nRule:
+      nRule[sheet] = {}
+    value1 = 0.0
+    value2 = 0.0
+    try:
+      value1 = float(numRule['value1'])
+    except:
+      value1 = 0.0
+    
+    try:
+      value2 = float(numRule['value2'])
+    except:
+      value2 = 0.0
+    nRule[sheet][heading] = {}
+    nRule[sheet][heading]['list'] = [value1,value2]
+
+  ddRule = {}
+  for dvRule in dvRules:
+    sheet = dvRule['Target Sheet']
+    targetColIndex = str(col_to_num(dvRule['Target column']))
+    heading = headers[sheet][targetColIndex]
+    if not sheet in ddRule:
+      ddRule[sheet] = {}
+    ddRule[sheet][heading] = {}
+
+    ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
+    # print(dvRule['Target Sheet'] + " | " + heading)
+    ddRule[dvRule['Target Sheet']][heading]['list'] = []
+    for ruleItem in ruleList:
+      ddRule[dvRule['Target Sheet']][heading]['list'].append(ruleItem[0])
+
+  checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp,sheetList, ddRule, nRule, dRule)
 
   checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
   checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
