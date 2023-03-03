@@ -328,7 +328,7 @@ def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
 
-      checkRpPeriod ('IPC_additional sheet', row, rpMth, rpYr)
+      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp,'IPC_additional sheet', row, rpMth, rpYr)
       checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'IPC_additional sheet', row, personCode, providerType)
       
     if len(ipcCheck) > 0:
