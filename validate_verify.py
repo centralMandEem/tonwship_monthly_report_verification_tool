@@ -587,7 +587,7 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       status = recruit["Status"]
 
       if wpNum != '' or activityDesc != '' or pos != '' or providerCode != '' or providerName != '' or vc != '' or rhc != '' or sc != '' or vname != '' or sDate != '' or eDate != '' or status != '':
-        if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum != '' or activityDesc != '' or pos != '' or sDate != '' or status != '':
+        if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activityDesc == '' or pos == '' or sDate == '' or status == '':
           print(recruit)
           checkStr = "row - " + str(row) + " | Incomplete data"
           recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
