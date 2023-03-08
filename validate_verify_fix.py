@@ -1409,16 +1409,6 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
-      if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and org != 'NMCP' and org != 'NMCP/URC' and org != 'URC/NMCP':
-        providerPostCode = rpBy[:-2]
-        providerVc = providerData[providerPostCode][rpBy]['Assigned_village_code']
-        if providerVc != '':
-          providerRhc = vilData[providerVc]['RHC_Name']
-          providerSc = vilData[providerVc]['Sub-center_Name']
-          providerVname = vilData[providerVc]['Name_of_Village']
-          if cblRhc != providerRhc or cblSc != providerSc or cblAddr != providerVname:
-            checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
-            check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       try:
         if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and org != 'NMCP' and org != 'NMCP/URC' and org != 'URC/NMCP':
           providerPostCode = rpBy[:-2]
