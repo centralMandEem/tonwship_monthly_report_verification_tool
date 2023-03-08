@@ -1417,7 +1417,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           providerSc = vilData[providerVc]['Sub-center_Name']
           providerVname = vilData[providerVc]['Name_of_Village']
           if cblRhc != providerRhc or cblSc != providerSc or cblAddr != providerVname:
-            checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+personCode+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
+            checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       try:
         if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and org != 'NMCP' and org != 'NMCP/URC' and org != 'URC/NMCP':
@@ -1428,7 +1428,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             providerSc = vilData[providerVc]['Sub-center_Name']
             providerVname = vilData[providerVc]['Name_of_Village']
             if cblRhc != providerRhc or cblSc != providerSc or cblAddr != providerVname:
-              checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+personCode+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
+              checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       except:
         print(json.dumps(sData, indent=4))
