@@ -1578,7 +1578,6 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   mainOrg = ''
   mainSr = ''
   mainTsp = ''
-  print(json.dumps(sheetList['All_provider'],indent=4))
 
   allVillagesData = sheetList['All_villages']['data']
   allVillagesDataTmp = {}
@@ -1610,6 +1609,7 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
         allProviderDataTmp[providerPostCode][personCode] = providerData
   sheetList['All_provider']['data'] = allProviderDataTmp
   allProviderDataTmp = None
+  print(json.dumps(sheetList['All_provider'],indent=4))
 
 
   tmpHeader = {}
