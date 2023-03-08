@@ -1461,7 +1461,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
               # print(sheetName + " | " + headText + " | " + str(rowData[headText]))
               value2check = str(rowData[headText]).replace(",","")
               if not value2check in ddList:
-                checkStr = "row - {rowNum} | Dropdown data validation check - invalid data in {headText1} column. Current value - {value}".format(rowNum=row,headText1=headText,value=rowData[headText]
+                checkStr = "row - {rowNum} | Dropdown data validation check - invalid data in {headText1} column. Current value - {value}".format(rowNum=row,headText1=headText,value=rowData[headText])
 #                 checkStr = "row - " + str(row) + " | Dropdown data validation check - invalid data in " + headText + " column. Current value - " + rowData[headText]
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
           
