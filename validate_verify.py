@@ -1385,6 +1385,9 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         if (activity == 'RACD-CIFIR' or activity == 'RACD' or activity == 'Followup response (within 3rd-5th week)' or activity == 'D28 followup response') and rCaseId == '':
           checkStr = "row - " + str(row) + " | Response to case ID data required for RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+        if activity != 'RACD-CIFIR' and activity != 'RACD' and activity != 'Followup response (within 3rd-5th week)' and activity != 'D28 followup response' and rCaseId != '':
+          checkStr = "row - " + str(row) + " | Response to case ID data mentioned for activity that is not one of RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
+          check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if he == "Y" and ageNum < 15:
           checkStr = "row - " + str(row) + " | HE 'Y' in patient <15 yr of age"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
@@ -1415,9 +1418,10 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             providerSc = vilData[providerVc]['Sub-center_Name']
             providerVname = vilData[providerVc]['Name_of_Village']
             if cblRhc != providerRhc or cblSc != providerSc or cblAddr != providerVname:
-              checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+personCode+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
+              checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       except:
+        print(json.dumps(sData, indent=4))
         checkStr = "row - " + str(row) + " | Person code not found in All provider sheet (" + rpBy + ")"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
@@ -1566,7 +1570,6 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
 
   # sheetList
   reportFile = gc.open_by_url(url_of_report_file)
-
   for sheetName in sheetList:
     sheet = reportFile.worksheet(sheetName)
     data = sheet.get_all_records(empty2zero=False, head=sheetList[sheetName]['headerRow'], default_blank='')
@@ -1607,6 +1610,7 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
         allProviderDataTmp[providerPostCode][personCode] = providerData
   sheetList['All_provider']['data'] = allProviderDataTmp
   allProviderDataTmp = None
+  print(json.dumps(sheetList['All_provider'],indent=4))
 
 
   tmpHeader = {}
