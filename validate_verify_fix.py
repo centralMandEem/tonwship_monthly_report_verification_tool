@@ -1569,7 +1569,6 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
 
   # sheetList
   reportFile = gc.open_by_url(url_of_report_file)
-  print(json.dumps(sheetList['All_provider'],indent=4))
   for sheetName in sheetList:
     sheet = reportFile.worksheet(sheetName)
     data = sheet.get_all_records(empty2zero=False, head=sheetList[sheetName]['headerRow'], default_blank='')
@@ -1579,6 +1578,7 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
   mainOrg = ''
   mainSr = ''
   mainTsp = ''
+  print(json.dumps(sheetList['All_provider'],indent=4))
 
   allVillagesData = sheetList['All_villages']['data']
   allVillagesDataTmp = {}
