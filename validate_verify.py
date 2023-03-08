@@ -1421,7 +1421,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
               checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       except:
-        print(json.dumps(sData, indent=4))
+#         print(json.dumps(sData, indent=4))
         checkStr = "row - " + str(row) + " | Person code not found in All provider sheet (" + rpBy + ")"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
@@ -1610,7 +1610,7 @@ def validata_or_verify_report(url_of_report_file, url_of_verification_file):
         allProviderDataTmp[providerPostCode][personCode] = providerData
   sheetList['All_provider']['data'] = allProviderDataTmp
   allProviderDataTmp = None
-  print(json.dumps(sheetList['All_provider'],indent=4))
+#   print(json.dumps(sheetList['All_provider'],indent=4))
 
 
   tmpHeader = {}
