@@ -613,13 +613,13 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if wpNum != '' or activityDesc != '' or pos != '' or providerCode != '' or providerName != '' or vc != '' or rhc != '' or sc != '' or vname != '' or sDate != '' or eDate != '' or status != '':
         if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activityDesc == '' or pos == '' or sDate == '' or status == '':
-          print(recruit)
+#           print(recruit)
           checkStr = "row - " + str(row) + " | Incomplete data"
           recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
       if status == 'Removed' and eDate == '':
-        print("checking removed status")
-        print(recruit)
+#         print("checking removed status")
+#         print(recruit)
         checkStr = "row - " + str(row) + " | Incomplete data"
         recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
@@ -1479,7 +1479,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
               # print(sheetName + " | " + headText + " | " + str(rowData[headText]))
               value2check = str(rowData[headText]).replace(",","")
               if not value2check in ddList:
-                print(rowData)
+#                 print(rowData)
                 checkStr = "row - {rowNum} | Dropdown data validation check - invalid data in {headText1} column. Current value - {value}".format(rowNum=row,headText1=headText,value=rowData[headText])
                 if sheetName == 'All_provider':
                   checkStr = avVc + " | " + checkStr
@@ -1499,7 +1499,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                 numV2C = -10.0
               
               if numV2C < nValue:
-                print(rowData)
+#                 print(rowData)
                 checkStr = "row - " + str(row) + " | Number validation check - invalid data in " + headText + " column. Current value - " + str(nvalue2check) + ". Value must be >= " + str(nValue)
                 if sheetName == 'All_provider':
                   checkStr = avVc + " | " + checkStr
@@ -1521,7 +1521,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                   dV2C = datetime.strptime('1/1/1900', '%m/%d/%Y')
               
               if dV2C < dValue:
-                print(rowData)
+#                 print(rowData)
                 checkStr = "row - " + str(row) + " | Date validation check - invalid data in " + headText + " column. Current value - " + str(dvalue2check) + ". Value must be on or after " + dValue.strftime("%d-%b-%Y")
                 if sheetName == 'All_provider':
                   checkStr = avVc + " | " + checkStr
