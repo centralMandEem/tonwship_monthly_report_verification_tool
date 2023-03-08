@@ -1439,13 +1439,18 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
       # print(json.dumps(allData[sheetName],indent=4))
       data = []
       for vilData in allData[sheetName]['data']:
-        data.append(allData[sheetName]['data'][vilData])
+        vD = allData[sheetName]['data'][vilData]
+        vD["Village_code"] = vilData
+        data.append(vD)
       dataStartRow = 2
     elif sheetName == 'All_provider':
       data = []
       for postCode in allData[sheetName]['data']:
         for personCode in allData[sheetName]['data'][postCode]:
-          data.append(allData[sheetName]['data'][postCode][personCode])
+          aP = allData[sheetName]['data'][postCode][personCode]
+          aP["Person_code"] = personCode
+          aP["Post_code"] = postCode
+          data.append(aP)
       dataStartRow = 3
     check = []
     for row, rowData in enumerate(data, start = dataStartRow):
@@ -1454,7 +1459,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
           continue
       # print(data)
       # print(rowData)
-      for headText in rowData:
+      for headText in rowData:         
         if rowData[headText] != '':
           # Checking dropdown validation
           if sheetName in ddRule:
