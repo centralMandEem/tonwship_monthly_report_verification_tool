@@ -1385,6 +1385,9 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         if (activity == 'RACD-CIFIR' or activity == 'RACD' or activity == 'Followup response (within 3rd-5th week)' or activity == 'D28 followup response') and rCaseId == '':
           checkStr = "row - " + str(row) + " | Response to case ID data required for RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+        if activity != 'RACD-CIFIR' and activity != 'RACD' and activity != 'Followup response (within 3rd-5th week)' and activity != 'D28 followup response' and rCaseId != '':
+          checkStr = "row - " + str(row) + " | Response to case ID data mentioned for activity that is not one of RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
+          check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if he == "Y" and ageNum < 15:
           checkStr = "row - " + str(row) + " | HE 'Y' in patient <15 yr of age"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
