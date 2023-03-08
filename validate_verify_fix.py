@@ -36,10 +36,11 @@ def convert2float(data):
 def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   allVillData = data['All_villages']['data']
   allProviderData = data['All_provider']['data']
+  dataStartRow = int(data['All_villages']['headerRow']) + 1
   # print(json.dumps(allVillData, indent=4))
   allVillCheck = []
   if len(allVillData) > 0:
-    for vc in allVillData:
+    for row, vc in enumerate(allVillData, start=dataStartRow):
       org = allVillData[vc]["Organization"]
       sr = allVillData[vc]["State_Region"]
       tsp = allVillData[vc]["Township"]
@@ -74,40 +75,40 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       removedReason = allVillData[vc]["Reason_for_removal"]
       # print(vc + ", " + str(hh) + "," + str(tpop) + "," + str(lat) + "," + str(lng))
       if removedDate != '' and removedReason == '':
-        villageCheckString = "Removed reason must be mentioned (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Removed reason must be mentioned (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
         
       if removedDate == '' and removedReason != '' and status != 'Removed':
-        villageCheckString = "Village/worksite is under implementation but removed reason is mentioned (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Village/worksite is under implementation but removed reason is mentioned (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
         
       if removedDate == '' and removedReason != '' and status == 'Removed':
-        villageCheckString = "Village/worksite is removed from project area but removed date is not mentioned (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Village/worksite is removed from project area but removed date is not mentioned (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
               
       if removedDate != '' and status != 'Removed':
-        villageCheckString = "Village was removed on " + removedDate + ". Status must be 'Removed'. (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Village was removed on " + removedDate + ". Status must be 'Removed'. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and (org == '' or sr == '' or tsp == '' or rhc == '' or sc == '' or vname == '' or vnamemm == '' or vow == '' or provider == '' or casemx == '' or llinDist == '' or pse == '' or \
                                 mpt == '' or atom == '' or ooredoo == '' or mytel == '' or c450 == '' or c800 == '' or oNetwork == '' or addedDate == '' or lastChangeDate == '' or status == ''):
-        villageCheckString = "Incomplete data (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Incomplete data (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and hh == 0:
-        villageCheckString = "HH data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "HH data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and lpop + migrant != tpop:
-        villageCheckString = "Calculation of total population error. (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Calculation of total population error. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and tpop == 0:
-        villageCheckString = "Population data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "Population data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
 
       if removedDate == '' and (lat == 0 or lat > 50 or lng == 50 or lng == 0 or lng < 50):
-        villageCheckString = "GPS data required or GPS data needs to be rechecked. (" + vc + ")"
+        villageCheckString = "row - " + str(row) + "GPS data required or GPS data needs to be rechecked. (" + vc + ")"
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '':
@@ -119,7 +120,7 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
               checkProvider = "Y"
               break        
         if checkProvider != provider:
-          villageCheckString = "VMW/PP_(Y/N) is not consistent with All_provider sheet. (" + vc + ")"
+          villageCheckString = "row - " + str(row) + "VMW/PP_(Y/N) is not consistent with All_provider sheet. (" + vc + ")"
           allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
 
     if len(allVillCheck) > 0:
@@ -133,6 +134,7 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 # Checking All_provider sheet
 def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   allProviderData = data['All_provider']['data']
+  dataStartRow = int(data['All_provider']['headerRow']) + 1
   allProviderCheck = []
   if len(allProviderData) > 0:
     for providerPost in allProviderData:
@@ -143,11 +145,11 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           activeProvider += 1
         
         if removedDate !="" and allProviderData[providerPost][person]['Reason_for_removal'] == '':
-          providerCheckString = "Provider removed without mentioning the reason (" + providerPost + ")"
+          providerCheckString = "Provider removed without mentioning the reason (" + providerPost + " | " + person + ")"
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
         
         if removedDate =="" and allProviderData[providerPost][person]['Reason_for_removal'] != '':
-          providerCheckString = "Provider is active but reason for removel is mentioned. (" + providerPost + ")"
+          providerCheckString = "Provider is active but reason for removel is mentioned. (" + providerPost + " | " + person + ")"
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
             
         if removedDate == "" and allProviderData[providerPost][person]['Type_of_provider'] != "GP" and allProviderData[providerPost][person]['Type_of_provider'] != "PMI-EM Township level team" and \
@@ -155,11 +157,11 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             allProviderData[providerPost][person]['Included_in_PMI_indicator_(Y/N)'] == '' or  allProviderData[providerPost][person]['ICMV_(Y/N)'] == '' or  allProviderData[providerPost][person]['Name_Of_Provider'] == '' or \
             allProviderData[providerPost][person]['Sex'] == '' or allProviderData[providerPost][person]['Assigned_village_code'] == '' or  allProviderData[providerPost][person]['Assigned_village_name'] == '' or  \
             allProviderData[providerPost][person]['Newly_added_date (starting from 29 Jan 2018)'] == '' or allProviderData[providerPost][person]['Date_of_last_changes_made'] == ''):
-          providerCheckString = "Incomplete data (" + providerPost + ")"
+          providerCheckString = "Incomplete data (" + providerPost + " | " + person + ")"
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
 
       if activeProvider > 1:
-        providerCheckString = "There are more than 1 active provider for the same provider post code (" + providerPost + ")"
+        providerCheckString = "There are more than 1 active provider for the same provider post code (" + providerPost + " | " + person + ")"
         allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
     if len(allProviderCheck) > 0:
       verifyFindingSheet.append_rows(allProviderCheck)
