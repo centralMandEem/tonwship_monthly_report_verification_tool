@@ -1468,6 +1468,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
               # print(sheetName + " | " + headText + " | " + str(rowData[headText]))
               value2check = str(rowData[headText]).replace(",","")
               if not value2check in ddList:
+                print(rowData)
                 checkStr = "row - {rowNum} | Dropdown data validation check - invalid data in {headText1} column. Current value - {value}".format(rowNum=row,headText1=headText,value=rowData[headText])
 #                 checkStr = "row - " + str(row) + " | Dropdown data validation check - invalid data in " + headText + " column. Current value - " + rowData[headText]
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
@@ -1483,6 +1484,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                 numV2C = -10.0
               
               if numV2C < nValue:
+                print(rowData)
                 checkStr = "row - " + str(row) + " | Number validation check - invalid data in " + headText + " column. Current value - " + str(nvalue2check) + ". Value must be >= " + str(nValue)
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
 
@@ -1500,6 +1502,7 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                   dV2C = datetime.strptime('1/1/1900', '%m/%d/%Y')
               
               if dV2C < dValue:
+                print(rowData)
                 checkStr = "row - " + str(row) + " | Date validation check - invalid data in " + headText + " column. Current value - " + str(dvalue2check) + ". Value must be on or after " + dValue.strftime("%d-%b-%Y")
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
 
