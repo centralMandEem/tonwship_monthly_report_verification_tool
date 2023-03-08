@@ -774,7 +774,6 @@ def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if amtNum > 0 or (amtNum <=0 and (wpNum != '' or activity != '' or item != '')):
         checkStr = "row - " + str(row) + " | Do not need to report this activity by State/Region or Township team. This is URC and Partner central teams' activity"
         procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
-
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'procurement sheet', row, rpMth, rpYr)
       
     if len(procureCheck) > 0:
@@ -807,7 +806,7 @@ def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if (wpNum != '' or activity != '' or orgSupport != '' or category != '' or detail != ''):
         if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activity == '' or orgSupport == '' or category == '' or detail == '':
           checkStr = "row - " + str(row) + " | Incomplete data"
-          cboCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
+          cboCheck.append([mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', row, rpMth, rpYr)
       
