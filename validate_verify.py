@@ -180,7 +180,7 @@ def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpM
     checkStr = "row - " + str(row) + " | Reporting period of previous fiscal year found (" + rpMth + " " + rpYr + ")"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
   if rpYr == 0:
-    checkStr = "row - " + str(row) + " | Reporting year error found. (" + rpMth + " " + rpYr + ")"
+    checkStr = f"row - {row} | Reporting year error found. {rpMth} {rpYr})"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking village code, rhc, sc, village name
