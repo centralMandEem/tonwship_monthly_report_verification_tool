@@ -172,6 +172,7 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 # checking reporting period
 def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpMth, rpYr):
+  rpYr = rpYr.replace(",","")
   rpYr = convert2float(rpYr)
   if rpYr == 2023 and (rpMth == 'October' or rpMth == 'November' or rpMth == 'December'):
     checkStr = "row - " + str(row) + " | Future reporting period found (" + rpMth + " " + rpYr + ")"
