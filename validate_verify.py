@@ -172,6 +172,7 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 # checking reporting period
 def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpMth, rpYr):
+  rpYr = convert2float(rpYr)
   if rpYr == '2023' and (rpMth == 'October' or rpMth == 'November' or rpMth == 'December'):
     checkStr = "row - " + str(row) + " | Future reporting period found (" + rpMth + " " + rpYr + ")"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
@@ -484,7 +485,7 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = "row - " + str(row) + " | Location is not worksite but type of worksite is mentioned"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
+      checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
       checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
       
     if len(llinCheck) > 0:
