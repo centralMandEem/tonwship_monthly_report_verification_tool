@@ -1320,6 +1320,21 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   providerData = data['All_provider']['data']
   nameOfSheet = "Patient record"
   resData = data[nameOfSheet]['data']
+  
+  month_mapping = {
+        'January': 1,
+        'February': 2,
+        'March': 3,
+        'April': 4,
+        'May': 5,
+        'June': 6,
+        'July': 7,
+        'August': 8,
+        'September': 9,
+        'October': 10,
+        'November': 11,
+        'December': 12
+    }
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
   check = []
@@ -1337,6 +1352,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       cblAddr = sData["Address in carbonless heading"]
       cblMth = sData["Month in Carbonless"]
       cblYr = sData["Year in Carbonless"]
+      cblPeriodEnd = datetime.datetime(cblYr, month_mapping[cblMth] + 1, 1) - datetime.timedelta(days=1)
       cblPg = sData["Carbonless Page No."]
       cblRow = sData["Carbonless Row No."]
       vc = sData["Village or Location Code of patient address if available"]
@@ -1345,6 +1361,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       rpMth = sData["Reporting Month"]
       rpYr = sData["Reporting Year"]
       date = sData["Tested Date"]
+      testTimeStamp = datetime.datetime.strptime(date, '%d-%b-%Y')
       name = sData["Name"]
       age = sData["Age Year"]
       vname = sData["Address"]
@@ -1380,6 +1397,9 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       ageNum = convert2float(sData["Age Year"])
 
       if tsp != '' or testResult != '':
+        if testTimeStamp > cblPeriodEnd:
+          checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
+          check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if org == '' or sr == '' or tsp == '' or providerType == '' or rpBy == '' or activity == '' or cblRhc == '' or cblSc == '' or cblAddr == '' or cblMth == '' or cblYr == '' or cblPg == '' or cblRow == '' or \
             vc == '' or rhc == '' or sc == '' or rpMth == '' or rpYr == '' or date == '' or name == '' or age == '' or vname == '' or popType == '' or sex == '' or testType == '' or numVisit == '' or testResult == '' or \
             pvNpv == '' or deBy == '':
