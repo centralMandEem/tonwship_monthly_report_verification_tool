@@ -1407,7 +1407,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             testTimeStamp = datetime.strptime(date, '%d-%b-%Y')          
             checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
-        else
+        else:
           checkStr = "row - " + str(row) + " | One of month in carbonless, year in carbonless and/or test date is blank."
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if org == '' or sr == '' or tsp == '' or providerType == '' or rpBy == '' or activity == '' or cblRhc == '' or cblSc == '' or cblAddr == '' or cblMth == '' or cblYr == '' or cblPg == '' or cblRow == '' or \
