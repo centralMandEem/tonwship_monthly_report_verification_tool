@@ -1353,12 +1353,6 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       cblMth = sData["Month in Carbonless"]
       cblYr = sData["Year in Carbonless"]
       cblYr = cblYr.replace(",","")
-      cblYrCalc = int(cblYr)
-      cblMthNum = month_mapping[cblMth] + 1
-      if cblMthNum == 13:
-        cblMthNum = 1
-        cblYrCalc = cblYrCalc + 1
-      cblPeriodEnd = datetime(cblYrCalc, cblMthNum, 1) - timedelta(days=1)
       cblPg = sData["Carbonless Page No."]
       cblRow = sData["Carbonless Row No."]
       vc = sData["Village or Location Code of patient address if available"]
@@ -1367,7 +1361,6 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       rpMth = sData["Reporting Month"]
       rpYr = sData["Reporting Year"]
       date = sData["Tested Date"]
-      testTimeStamp = datetime.strptime(date, '%d-%b-%Y')
       name = sData["Name"]
       age = sData["Age Year"]
       vname = sData["Address"]
@@ -1403,8 +1396,19 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       ageNum = convert2float(sData["Age Year"])
 
       if tsp != '' or testResult != '':
-        if testTimeStamp > cblPeriodEnd:
-          checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
+        if cblYr != '' and cblMth != '' and date != '':
+          if testTimeStamp > cblPeriodEnd:
+            cblYrCalc = int(cblYr)
+            cblMthNum = month_mapping[cblMth] + 1
+            if cblMthNum == 13:
+              cblMthNum = 1
+              cblYrCalc = cblYrCalc + 1
+            cblPeriodEnd = datetime(cblYrCalc, cblMthNum, 1) - timedelta(days=1)
+            testTimeStamp = datetime.strptime(date, '%d-%b-%Y')          
+            checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
+            check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+        else
+          checkStr = "row - " + str(row) + " | One of month in carbonless, year in carbonless and/or test date is blank.
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if org == '' or sr == '' or tsp == '' or providerType == '' or rpBy == '' or activity == '' or cblRhc == '' or cblSc == '' or cblAddr == '' or cblMth == '' or cblYr == '' or cblPg == '' or cblRow == '' or \
             vc == '' or rhc == '' or sc == '' or rpMth == '' or rpYr == '' or date == '' or name == '' or age == '' or vname == '' or popType == '' or sex == '' or testType == '' or numVisit == '' or testResult == '' or \
