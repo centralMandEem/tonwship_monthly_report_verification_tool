@@ -1361,7 +1361,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       rpMth = sData["Reporting Month"]
       rpYr = sData["Reporting Year"]
       date = sData["Tested Date"]
-      testTimeStamp = datetime.datetime.strptime(date, '%d-%b-%Y')
+      testTimeStamp = datetime.strptime(date, '%d-%b-%Y')
       name = sData["Name"]
       age = sData["Age Year"]
       vname = sData["Address"]
