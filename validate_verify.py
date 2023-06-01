@@ -1397,14 +1397,14 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if tsp != '' or testResult != '':
         if cblYr != '' and cblMth != '' and date != '':
-          if testTimeStamp > cblPeriodEnd:
-            cblYrCalc = int(cblYr)
-            cblMthNum = month_mapping[cblMth] + 1
-            if cblMthNum == 13:
-              cblMthNum = 1
-              cblYrCalc = cblYrCalc + 1
-            cblPeriodEnd = datetime(cblYrCalc, cblMthNum, 1) - timedelta(days=1)
-            testTimeStamp = datetime.strptime(date, '%d-%b-%Y')          
+          cblYrCalc = int(cblYr)
+          cblMthNum = month_mapping[cblMth] + 1
+          if cblMthNum == 13:
+            cblMthNum = 1
+            cblYrCalc = cblYrCalc + 1
+          cblPeriodEnd = datetime(cblYrCalc, cblMthNum, 1) - timedelta(days=1)
+          testTimeStamp = datetime.strptime(date, '%d-%b-%Y')  
+          if testTimeStamp > cblPeriodEnd:        
             checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         else:
