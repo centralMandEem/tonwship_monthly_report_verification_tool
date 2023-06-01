@@ -1352,7 +1352,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       cblAddr = sData["Address in carbonless heading"]
       cblMth = sData["Month in Carbonless"]
       cblYr = sData["Year in Carbonless"]
-      cblPeriodEnd = datetime(cblYr, month_mapping[cblMth] + 1, 1) - datetime.timedelta(days=1)
+      cblPeriodEnd = datetime(int(cblYr), int(month_mapping[cblMth] + 1), 1) - datetime.timedelta(days=1)
       cblPg = sData["Carbonless Page No."]
       cblRow = sData["Carbonless Row No."]
       vc = sData["Village or Location Code of patient address if available"]
