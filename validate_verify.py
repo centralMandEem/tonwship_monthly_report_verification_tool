@@ -2,7 +2,7 @@
 from google.colab import auth
 import pandas as pd
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 auth.authenticate_user()
 
 import gspread
@@ -1353,7 +1353,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       cblMth = sData["Month in Carbonless"]
       cblYr = sData["Year in Carbonless"]
       cblYr = cblYr.replace(",","")
-      cblPeriodEnd = datetime(int(cblYr), int(month_mapping[cblMth] + 1), 1) - datetime.timedelta(days=1)
+      cblPeriodEnd = datetime(int(cblYr), int(month_mapping[cblMth] + 1), 1) - timedelta(days=1)
       cblPg = sData["Carbonless Page No."]
       cblRow = sData["Carbonless Row No."]
       vc = sData["Village or Location Code of patient address if available"]
