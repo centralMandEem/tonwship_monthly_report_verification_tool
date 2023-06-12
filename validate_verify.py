@@ -75,40 +75,40 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       removedReason = allVillData[vc]["Reason_for_removal"]
       # print(vc + ", " + str(hh) + "," + str(tpop) + "," + str(lat) + "," + str(lng))
       if removedDate != '' and removedReason == '':
-        villageCheckString = "row - " + str(row) + "Removed reason must be mentioned (" + vc + ")"
+        villageCheckString = f'row - {row} | Removed reason must be mentioned ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
         
       if removedDate == '' and removedReason != '' and status != 'Removed':
-        villageCheckString = "row - " + str(row) + "Village/worksite is under implementation but removed reason is mentioned (" + vc + ")"
+        villageCheckString = f'row - {row} | Village/worksite is under implementation but removed reason is mentioned ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
         
       if removedDate == '' and removedReason != '' and status == 'Removed':
-        villageCheckString = "row - " + str(row) + "Village/worksite is removed from project area but removed date is not mentioned (" + vc + ")"
+        villageCheckString = f'row - {row} | Village/worksite is removed from project area but removed date is not mentioned ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
               
       if removedDate != '' and status != 'Removed':
-        villageCheckString = "row - " + str(row) + "Village was removed on " + removedDate + ". Status must be 'Removed'. (" + vc + ")"
+        villageCheckString = f'row - {row} | Village was removed on {removedDate}. Status must be "Removed". ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and (org == '' or sr == '' or tsp == '' or rhc == '' or sc == '' or vname == '' or vnamemm == '' or vow == '' or provider == '' or casemx == '' or llinDist == '' or pse == '' or \
                                 mpt == '' or atom == '' or ooredoo == '' or mytel == '' or c450 == '' or c800 == '' or oNetwork == '' or addedDate == '' or lastChangeDate == '' or status == ''):
-        villageCheckString = "row - " + str(row) + "Incomplete data (" + vc + ")"
+        villageCheckString = f'row - {row} | Incomplete data ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and hh == 0:
-        villageCheckString = "row - " + str(row) + "HH data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
+        villageCheckString = f'row - {row} | HH data of EM coverage village/worksite must not be unknown and must be at least 1. ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and lpop + migrant != tpop:
-        villageCheckString = "row - " + str(row) + "Calculation of total population error. (" + vc + ")"
+        villageCheckString = f'row - {row} | Calculation of total population error. ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '' and tpop == 0:
-        villageCheckString = "row - " + str(row) + "Population data of EM coverage village/worksite must not be unknown and must be at least 1. (" + vc + ")"
+        villageCheckString = f'row - {row} | Population data of EM coverage village/worksite must not be unknown and must be at least 1. ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
 
       if removedDate == '' and (lat == 0 or lat > 50 or lng == 50 or lng == 0 or lng < 50):
-        villageCheckString = "row - " + str(row) + "GPS data required or GPS data needs to be rechecked. (" + vc + ")"
+        villageCheckString = f'row - {row} | GPS data required or GPS data needs to be rechecked. ({vc})'
         allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
       
       if removedDate == '':
@@ -120,7 +120,7 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
               checkProvider = "Y"
               break        
         if checkProvider != provider:
-          villageCheckString = "row - " + str(row) + "VMW/PP_(Y/N) is not consistent with All_provider sheet. (" + vc + ")"
+          villageCheckString = f'row - {row} | VMW/PP_(Y/N) is not consistent with All_provider sheet. ({vc})'
           allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
 
     if len(allVillCheck) > 0:
@@ -145,11 +145,11 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           activeProvider += 1
         
         if removedDate !="" and allProviderData[providerPost][person]['Reason_for_removal'] == '':
-          providerCheckString = "Provider removed without mentioning the reason (" + providerPost + " | " + person + ")"
+          providerCheckString = f'Provider removed without mentioning the reason ({providerPost} | {person})'
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
         
         if removedDate =="" and allProviderData[providerPost][person]['Reason_for_removal'] != '':
-          providerCheckString = "Provider is active but reason for removel is mentioned. (" + providerPost + " | " + person + ")"
+          providerCheckString = f'Provider is active but reason for removel is mentioned. ({providerPost} | {person})'
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
             
         if removedDate == "" and allProviderData[providerPost][person]['Type_of_provider'] != "GP" and allProviderData[providerPost][person]['Type_of_provider'] != "PMI-EM Township level team" and \
@@ -157,11 +157,11 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             allProviderData[providerPost][person]['Included_in_PMI_indicator_(Y/N)'] == '' or  allProviderData[providerPost][person]['ICMV_(Y/N)'] == '' or  allProviderData[providerPost][person]['Name_Of_Provider'] == '' or \
             allProviderData[providerPost][person]['Sex'] == '' or allProviderData[providerPost][person]['Assigned_village_code'] == '' or  allProviderData[providerPost][person]['Assigned_village_name'] == '' or  \
             allProviderData[providerPost][person]['Newly_added_date (starting from 29 Jan 2018)'] == '' or allProviderData[providerPost][person]['Date_of_last_changes_made'] == ''):
-          providerCheckString = "Incomplete data (" + providerPost + " | " + person + ")"
+          providerCheckString = f'Incomplete data ({providerPost} | {person})'
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
 
       if activeProvider > 1:
-        providerCheckString = "There are more than 1 active provider for the same provider post code (" + providerPost + " | " + person + ")"
+        providerCheckString = f'There are more than 1 active provider for the same provider post code ({providerPost} | {person})'
         allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
     if len(allProviderCheck) > 0:
       verifyFindingSheet.append_rows(allProviderCheck)
@@ -189,26 +189,26 @@ def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpM
 def checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, vc, rhc, sc, vname, vow=None):
   vilData = data['All_villages']['data']
   if vc!= '' and len(vc) != 12:
-    checkStr = "row - " + str(row) + " | Village code format error"
+    checkStr = f"row - {row} | Village code format error"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
   if vow==None:
     if vc != '' and vc[-4:] != '9999' and vc[-4:] != '9998' and len(vc) == 12 and (rhc != vilData[vc]['RHC_Name'] or sc != vilData[vc]['Sub-center_Name'] or vname != vilData[vc]['Name_of_Village']):
-      checkStr = "row - " + str(row) + " | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
+      checkStr = f"row - {row} | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
       verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
   else:
     if vc != '' and vc[-4:] != '9999' and vc[-4:] != '9998' and len(vc) == 12 and (rhc != vilData[vc]['RHC_Name'] or sc != vilData[vc]['Sub-center_Name'] or vname != vilData[vc]['Name_of_Village'] or vow != vilData[vc]['Village/Worksite']):
-      checkStr = "row - " + str(row) + " | Village code, RHC, Subcenter, village name or Village/Worksite is not exactly the same as those mentioned in All_villages sheet"
+      checkStr = f"row - {row} | Village code, RHC, Subcenter, village name or Village/Worksite is not exactly the same as those mentioned in All_villages sheet"
       verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking personCode and type of provider
 def checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, personCode, providerType):
   providerData = data['All_provider']['data']
   if personCode != '' and len(personCode) != 9:
-    checkStr = "row - " + str(row) + " | Person code format error"
+    checkStr = f"row - {row} | Person code format error"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
   if personCode != '' and len(personCode) == 9 and providerData[personCode[:-2]][personCode]['Type_of_provider'] != providerType:
-    checkStr = "row - " + str(row) + " | Provider code and provider type is not exactly the same as those mentioned in All_provider sheet"
+    checkStr = f"row - {row} | Provider code and provider type is not exactly the same as those mentioned in All_provider sheet"
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
 
 # checking Potential malaria outbreak sheet
@@ -238,15 +238,15 @@ def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       
 
       if rp2THD != "Y" and rp2THD != "":
-        checkStr = "row - " + str(row) + " | If not reported to THD, doesn't need to mention in this report"
+        checkStr = f"row - {row} | If not reported to THD, doesn't need to mention in this report"
         pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
 
       if rp2THD == "Y" and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or vc == '' or rhc == '' or sc == '' or vname == '' or threshold == '' or curData == '' or curData < threshold or rpDate == '' or obOccur == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
 
       if rp2THD == "Y" and obOccur == "Y" and sDate == '':
-        checkStr = "row - " + str(row) + " | Incomplete data. Outbreak occur and start date not mentioned."
+        checkStr = f"row - {row} | Incomplete data. Outbreak occur and start date not mentioned."
         pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
@@ -294,25 +294,25 @@ def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       migrant = convert2float(pla['# of migrants included'])
 
       if male + female != total:
-        checkStr = "row - " + str(row) + " | Total attendance calculation error"
+        checkStr = f"row - {row} | Total attendance calculation error"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
       if total > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or date == '' or vc == '' or rhc == '' or sc == '' or vname == '' or facilitatorType == '' or \
                         map == '' or sia == '' or aua == '' or sta == '' or pta == '' or trw == '' or tsm == '' or fgd == '' or lpy == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
       
       if total <= 0 and (date != '' or vc != '' or rhc != '' or sc != '' or vname != '' or facilitatorType != '' or \
                         map != '' or sia != '' or aua != '' or sta != '' or pta != '' or trw != '' or tsm != '' or fgd != '' or lpy != ''):
-        checkStr = "row - " + str(row) + " | Activities with 0 or blank total attendance doesn't need to be mentioned in this report."
+        checkStr = f"row - {row} | Activities with 0 or blank total attendance doesn't need to be mentioned in this report."
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
       if vc!= '' and len(vc) != 12:
-        checkStr = "row - " + str(row) + " | Village code format error"
+        checkStr = f"row - {row} | Village code format error"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
       if vc != '' and vc[-4:] != '9999' and vc[-4:] != '9998' and len(vc) == 12 and (rhc != vilData[vc]['RHC_Name'] or sc != vilData[vc]['Sub-center_Name'] or vname != vilData[vc]['Name_of_Village']):
-        checkStr = "row - " + str(row) + " | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
+        checkStr = f"row - {row} | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
@@ -346,15 +346,15 @@ def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       migrant = convert2float(ipc['# of migrants included'])
 
       if male + female != total:
-        checkStr = "row - " + str(row) + " | Total attendance calculation error"
+        checkStr = f"row - {row} | Total attendance calculation error"
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
       
       if total > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or personCode == '' or providerType == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
       
       if total <= 0 and (personCode != '' or providerType != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp,'IPC_additional sheet', row, rpMth, rpYr)
@@ -394,19 +394,19 @@ def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       migrant = convert2float(ght['# of migrants included'])
 
       if male + female != total:
-        checkStr = "row - " + str(row) + " | Total attendance calculation error"
+        checkStr = f"row - {row} | Total attendance calculation error"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
       if (total >0 and heSess <= 0) or (total <=0 and heSess > 0):
-        checkStr = "row - " + str(row) + " | Incorrect data"
+        checkStr = f"row - {row} | Incorrect data"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
       if total > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or personCode == '' or providerType == '' or vc == '' or rhc == '' or sc == '' or vname == '' or vow == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data. (Only the data of project staff activity and activity of provider under EM project need to be mentioned in this report"
+        checkStr = f"row - {row} | Incomplete data. (Only the data of project staff activity and activity of provider under EM project need to be mentioned in this report"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
       
       if total <=0 and (personCode != '' or providerType != '' or vc != '' or rhc != '' or sc != '' or vname != '' or vow != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', row, rpMth, rpYr)
@@ -470,24 +470,24 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       popLlinNum = convert2float(llin["Net Ownership (Population/LLIN)"])
 
       if llinAmtNum > 0 and (hhPresentNum < hhCoveredNum or a5POPNum + u5POPNum != popCoveredNum or popPresentNum < popCoveredNum or popCoveredNum < pregNum or popCoveredNum < migrantNum):
-        checkStr = "row - " + str(row) + " | Data entry error in HH and POP data"
+        checkStr = f"row - {row} | Data entry error in HH and POP data"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
       if llinAmtNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or date == '' or vc == '' or rhc == '' or sc == '' or vname == '' or vow == '' or hhPresent == '' or hhCovered == '' or \
                              popPresent == '' or popCovered == '' or u5POP == '' or a5POP == '' or preg == '' or migrant == '' or llinAmt == '' or popLlin == '' or mc == '' or brand == '' or completeness == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
       if llinAmtNum <= 0 and (date != '' or vc != '' or rhc != '' or sc != '' or vname != '' or vow != '' or wType != '' or migrant != '' or mc != '' or brand != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
       if vow == 'Worksite' and wType == '':
-        checkStr = "row - " + str(row) + " | Location is worksite but type of worksite is not mentioned"
+        checkStr = f"row - {row} | Location is worksite but type of worksite is not mentioned"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
       
       if vow == 'Village' and wType != '':
-        checkStr = "row - " + str(row) + " | Location is not worksite but type of worksite is mentioned"
+        checkStr = f"row - {row} | Location is not worksite but type of worksite is mentioned"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
       checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
@@ -532,16 +532,16 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if llinAmtNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or rhc == '' or sc == '' or hh == '' or pop == '' or \
                           distMth == '' or distYr == '' or pregAttend == '' or pregTest == '' or pregPos == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
       
       if llinAmtNum <= 0 and (rhc != '' or sc != '' or vname != '' or hh != '' or pop != '' or \
                           distMth != '' or distYr != '' or pregAttend != '' or pregTest != '' or pregPos != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
       
       if llinAmtNum > 0 and llinAmtNum > pregAttendNum:
-        checkStr = "row - " + str(row) + " | Distributed LLIN is more than pregnant women attended"
+        checkStr = f"row - {row} | Distributed LLIN is more than pregnant women attended"
         ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
         
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', row, rpMth, rpYr)
@@ -574,11 +574,11 @@ def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       llinAmtNum = convert2float(llinOther["# of LLIN distributed"])
 
       if llinAmtNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or desc == '' or date == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr])
 
       if llinAmtNum <= 0 and (desc != '' or date != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', row, rpMth, rpYr)
@@ -620,13 +620,13 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if wpNum != '' or activityDesc != '' or pos != '' or providerCode != '' or providerName != '' or vc != '' or rhc != '' or sc != '' or vname != '' or sDate != '' or eDate != '' or status != '':
         if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activityDesc == '' or pos == '' or sDate == '' or status == '':
 #           print(recruit)
-          checkStr = "row - " + str(row) + " | Incomplete data"
+          checkStr = f"row - {row} | Incomplete data"
           recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
       if status == 'Removed' and eDate == '':
 #         print("checking removed status")
 #         print(recruit)
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Recruitment sheet', row, rpMth, rpYr)
@@ -666,11 +666,11 @@ def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       mobile = convert2float(c19["# of mobile teams receiving C19 prevention materials"])
 
       if (icmv > 0 or gp > 0 or mobile > 0) and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activity == '' or item == '' or icmv == '' or gp == '' or mobile == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr])
 
       if icmv <= 0 and gp <= 0 and mobile <= 0 and (wpNum != '' or activity != '' or item != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', row, rpMth, rpYr)
@@ -707,11 +707,11 @@ def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       amtNum = convert2float(iec["Number of items distributed"])
 
       if amtNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activity == '' or item == '' or amt == '' or unit == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr])
         
       if amtNum <= 0 and (wpNum != '' or activity != '' or item != '' or amt != '' or unit != ''):
-        checkStr = "row - " + str(row) + " | 0 or blank activity data doesn't need to be mentioned in the report"
+        checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', row, rpMth, rpYr)
@@ -745,7 +745,7 @@ def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       amtNum = convert2float(commo["Number of items distributed"])
 
       if amtNum > 0 or (amtNum <=0 and (dest != '' or wpNum != '' or activity != '' or unit != '' or rmk != '')):
-        checkStr = "row - " + str(row) + " | Do not need to report this activity by State/Region or Township team. This is URC central logistic team's activity"
+        checkStr = f"row - {row} | Do not need to report this activity by State/Region or Township team. This is URC central logistic team's activity"
         commoCheck.append([mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', row, rpMth, rpYr)
@@ -778,7 +778,7 @@ def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       amtNum = convert2float(procure["Number of items procured/purchased"])
 
       if amtNum > 0 or (amtNum <=0 and (wpNum != '' or activity != '' or item != '')):
-        checkStr = "row - " + str(row) + " | Do not need to report this activity by State/Region or Township team. This is URC and Partner central teams' activity"
+        checkStr = f"row - {row} | Do not need to report this activity by State/Region or Township team. This is URC and Partner central teams' activity"
         procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'procurement sheet', row, rpMth, rpYr)
       
@@ -811,7 +811,7 @@ def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if (wpNum != '' or activity != '' or orgSupport != '' or category != '' or detail != ''):
         if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activity == '' or orgSupport == '' or category == '' or detail == '':
-          checkStr = "row - " + str(row) + " | Incomplete data"
+          checkStr = f"row - {row} | Incomplete data"
           cboCheck.append([mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', row, rpMth, rpYr)
@@ -847,7 +847,7 @@ def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if wpNum != '' or activity != '' or sDate != '' or status != '':
         if org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or activity == '' or sDate == '' or status == '':
-          checkStr = "row - " + str(row) + " | Incomplete data"
+          checkStr = f"row - {row} | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -882,7 +882,7 @@ def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, dat
 
       if wpNum != '' or activity != '' or sDate != '' or eDate != '' or status != '' or fDate != '':
         if org == '' or sr == '' or tsp == '' or wpNum == '' or activity == '' or sDate == '' or status == '':
-          checkStr = "row - " + str(row) + " | Incomplete data"
+          checkStr = f"row - {row} | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
     if len(check) > 0:
@@ -915,7 +915,7 @@ def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       detail = sData["Visit detail information (including data)"]
       
       if (vBy != '' or vTo != '') and (org == '' or sr == '' or tsp == '' or wpNum == '' or activity == '' or vBy == '' or vTo == '' or date == '' or duration == '' or detail == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
     if len(check) > 0:
@@ -959,15 +959,15 @@ def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       total = convert2float(sData["Number of participants (Total)"])
       
       if male + female != total:
-        checkStr = "row - " + str(row) + " | Total participant calculation error"
+        checkStr = f"row - {row} | Total participant calculation error"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       if total > 0 and duration <= 0:
-        checkStr = "row - " + str(row) + " | Duration (in days) must be number and at least 1"
+        checkStr = f"row - {row} | Duration (in days) must be number and at least 1"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       if total > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or wpNum == '' or rpLvl == '' or location == '' or \
                         activity == '' or date == '' or duration == '' or male == '' or female == '' or total == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1033,42 +1033,42 @@ def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           apProviderVname = providerData[personCode[:-2]][personCode]['Assigned_village_name']
 
           if personCode != '' and len(personCode) != 9:
-            checkStr = "row - " + str(row) + " | Person code format error"
+            checkStr = f"row - {row} | Person code format error"
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])      
           if personCode != '' and len(personCode) == 9 and (providerType != apProviderType or providerName != apProviderName or sex != apProviderSex or vc != apProviderVc or vname != apProviderVname):
-            checkStr = "row - " + str(row) + " | Person code, name, sex, assigned village code or assigned village name are not the same as those mentioned in All_provider sheet. (" + personCode + ")" 
+            checkStr = f"row - {row} | Person code, name, sex, assigned village code or assigned village name are not the same as those mentioned in All_provider sheet. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])      
           if personCode!= '' and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == ''):
-            checkStr = "row - " + str(row) + " | Incomplete data." 
+            checkStr = f"row - {row} | Incomplete data." 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and mv != '' and (mvDate == '' or mvRDTso == '' or mvACTso == '' or mvCQso == '' or mvPQso == ''):
-            checkStr = "row - " + str(row) + " | Monitoring visit - Incomplete data. (" + personCode + ")" 
+            checkStr = f"row - {row} | Monitoring visit - Incomplete data. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])      
           if personCode != '' and mv == '' and (mvDate != '' or mvRDTso != '' or mvACTso != '' or mvCQso != '' or mvPQso != ''):
-            checkStr = "row - " + str(row) + " | Monitoring visit - Stockout data reported but monitoring visit not mentioned. (" + personCode + ")" 
+            checkStr = f"row - {row} | Monitoring visit - Stockout data reported but monitoring visit not mentioned. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and osdc == "Y" and (osdcRDTso == '' or osdcACTso == '' or osdcCQso == '' or osdcPQso == ''):
-            checkStr = "row - " + str(row) + " | Onsite data collection - Incomplete data. (" + personCode + ")" 
+            checkStr = f"row - {row} | Onsite data collection - Incomplete data. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])      
           if personCode != '' and osdc == "" and (osdcRDTso != '' or osdcACTso != '' or osdcCQso != '' or osdcPQso != ''):
-            checkStr = "row - " + str(row) + " | Onsite data collection - Stockout data reported without OSDC. (" + personCode + ")" 
+            checkStr = f"row - {row} | Onsite data collection - Stockout data reported without OSDC. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and meet == "Y" and (meetRDTso == '' or meetACTso == '' or meetCQso == '' or meetPQso == ''):
-            checkStr = "row - " + str(row) + " | Monthly meeting - Incomplete data. (" + personCode + ")" 
+            checkStr = f"row - {row} | Monthly meeting - Incomplete data. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
           if personCode != '' and meet != "Y" and (meetRDTso != '' or meetACTso != '' or meetCQso != '' or meetPQso != ''):
-            checkStr = "row - " + str(row) + " | Monthly meeting - Stockout data reported without attending monthly meeting. (" + personCode + ")" 
+            checkStr = f"row - {row} | Monthly meeting - Stockout data reported without attending monthly meeting. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and ov != '' and (ovRDTso == '' or ovACTso == '' or ovCQso == '' or ovPQso == ''):
-            checkStr = "row - " + str(row) + " | Other visit - Incomplete data. (" + personCode + ")" 
+            checkStr = f"row - {row} | Other visit - Incomplete data. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and ov == '' and (ovRDTso != '' or ovACTso != '' or ovCQso != '' or ovPQso != ''):
-            checkStr = "row - " + str(row) + " | Other visit - Stockout data reported without mentioning the visit. (" + personCode + ")" 
+            checkStr = f"row - {row} | Other visit - Stockout data reported without mentioning the visit. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1132,26 +1132,26 @@ def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           apProviderVname = providerData[personCode[:-2]][personCode]['Assigned_village_name']
 
           if personCode != '' and len(personCode) != 9:
-            checkStr = "row - " + str(row) + " | Person code format error"
+            checkStr = f"row - {row} | Person code format error"
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
           if personCode != '' and len(personCode) == 9 and (providerType != apProviderType or providerName != apProviderName or sex != apProviderSex):
-            checkStr = "row - " + str(row) + " | Person code, name, sex, assigned village code or assigned village name are not the same as those mentioned in All_provider sheet. (" + personCode + ")" 
+            checkStr = f"row - {row} | Person code, name, sex, assigned village code or assigned village name are not the same as those mentioned in All_provider sheet. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
           if personCode != '' and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or personCode == '' or providerType == '' or providerName == '' or sex == '' or nor == '' or \
                                    replacement == '' or onjob == '' or id == '' or place == '' or sdate == '' or edate == '' or duration == ''):
-            checkStr = "row - " + str(row) + " | Incomplete data. (" + personCode + ")" 
+            checkStr = f"row - {row} | Incomplete data. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and dx == 'full' and cmx == 'full' and pmi == 'Y':
             if not personCode in pmiIndicator:
               pmiIndicator.append(personCode)
             else:
-              checkStr = "row - " + str(row) + " | " + personCode + " is already reported as PMI indicator before" 
+              checkStr = f"row - {row} | {personCode} is already reported as PMI indicator before" 
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           if personCode != '' and dx == 'full' and cmx == 'full' and pmi != 'Y':
             if not personCode in pmiIndicator:
-              checkStr = "row - " + str(row) + " | " + personCode + " received full package of Diagnosis and case management and has not been reported as PMI indicator. Suggested to report as PMI indicator or change 'full' to 'partial'" 
+              checkStr = f"row - {row} | {personCode} received full package of Diagnosis and case management and has not been reported as PMI indicator. Suggested to report as PMI indicator or change 'full' to 'partial'" 
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
           checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1202,12 +1202,12 @@ def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       csgAttendNum = convert2float(sData["No. Participants attended"])
       
       if csgAttendNum > 0 and csgMemNum < csgAttendNum:
-        checkStr = "row - " + str(row) + " | Number of attended members are greater than number of CSG members"
+        checkStr = f"row - {row} | Number of attended members are greater than number of CSG members"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
       if csgAttendNum > 0 and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or vc == '' or rhc == '' or sc == '' or vname == '' or date == '' or csgMem == '' or \
                                mcm == '' or ics == '' or ela == '' or cbhs == '' or ethd == '' or er == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1244,7 +1244,7 @@ def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       date = sData["Date of support"]
 
       if smallGrant == "Y" and (org == '' or sr == '' or tsp == '' or rpMth == '' or rpYr == '' or vc == '' or rhc == '' or sc == '' or vname == '' or date == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1300,7 +1300,7 @@ def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if personCode != '' and (org == '' or sr == '' or tsp == '' or providerType == '' or quarter == '' or fy == '' or mal1 == '' or mal2 == '' or mal3 == '' or mal4 == '' or mal5 == '' or mal6 == '' or mal7 == '' or \
                                dhf1 == '' or dhf2 == '' or fal1 == '' or fal2 == '' or fal3 == '' or tb1 == '' or tb2 == '' or tb3 == '' or tb4 == '' or hiv1 == '' or hiv2 == '' or hiv3 == '' or hiv4 == '' or \
                                lep1 == '' or lep2 == '' or lep3 == ''):
-        checkStr = "row - " + str(row) + " | Incomplete data"
+        checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet', row, personCode, providerType)
@@ -1407,42 +1407,42 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           cblPeriodEnd = datetime(cblYrCalc, cblMthNum, 1) - timedelta(days=1)
           testTimeStamp = datetime.strptime(date, '%d-%b-%Y')  
           if testTimeStamp > cblPeriodEnd:        
-            checkStr = "row - " + str(row) + " | Blood testing date and month in carbonless is not consistent. Month in carbonless - " + cblMth + " | Year in carbonless - " + cblYr + " | Test date - " + date
+            checkStr = f"row - {row} | Blood testing date and month in carbonless is not consistent. Month in carbonless - {cblMth} | Year in carbonless - {cblYr} | Test date - {date}"
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         else:
-          checkStr = "row - " + str(row) + " | One of month in carbonless, year in carbonless and/or test date is blank."
+          checkStr = f"row - {row} | One of month in carbonless, year in carbonless and/or test date is blank."
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if org == '' or sr == '' or tsp == '' or providerType == '' or rpBy == '' or activity == '' or cblRhc == '' or cblSc == '' or cblAddr == '' or cblMth == '' or cblYr == '' or cblPg == '' or cblRow == '' or \
             vc == '' or rhc == '' or sc == '' or rpMth == '' or rpYr == '' or date == '' or name == '' or age == '' or vname == '' or popType == '' or sex == '' or testType == '' or numVisit == '' or testResult == '' or \
             pvNpv == '' or deBy == '':
-          checkStr = "row - " + str(row) + " | Incomplete data"
+          checkStr = f"row - {row} | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if preg != '' and sex != 'F':
-          checkStr = "row - " + str(row) + " | Pregnant but not female"
+          checkStr = f"row - {row} | Pregnant but not female"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if (activity == 'RACD-CIFIR' or activity == 'RACD' or activity == 'Followup response (within 3rd-5th week)' or activity == 'D28 followup response') and rCaseId == '':
-          checkStr = "row - " + str(row) + " | Response to case ID data required for RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
+          checkStr = f"row - {row} | Response to case ID data required for RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if activity != 'RACD-CIFIR' and activity != 'RACD' and activity != 'Followup response (within 3rd-5th week)' and activity != 'D28 followup response' and rCaseId != '':
-          checkStr = "row - " + str(row) + " | Response to case ID data mentioned for activity that is not one of RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
+          checkStr = f"row - {row} | Response to case ID data mentioned for activity that is not one of RACD, RACD-CIFIR, Followup response (within 3rd-5th week) or D28 followup response"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if he == "Y" and ageNum < 15:
-          checkStr = "row - " + str(row) + " | HE 'Y' in patient <15 yr of age"
+          checkStr = f"row - {row} | HE 'Y' in patient <15 yr of age"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if he == 'Y' and heBy == '':
-          checkStr = "row - " + str(row) + " | HE 'Y' but HE provider not mentioned"
+          checkStr = f"row - {row} | HE 'Y' but HE provider not mentioned"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if testResult != 'Negative' and refer != 'Y' and (dx == '' or act == '' or cq == '' or pq75 == '' or pq15 == '' or lt24 == '' or refer == '' or death == '' or travel == '' or occu == '' or dotStatus == '' or caseId == ''):
-          checkStr = "row - " + str(row) + " | Incomplete data - Positive not referred patient"
+          checkStr = f"row - {row} | Incomplete data - Positive not referred patient"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if testResult != 'Negative' and refer == 'Y' and (dx == '' or lt24 == '' or refer == '' or death == '' or travel == '' or occu == '' or caseId == '' or dotStatus == ''):
-          checkStr = "row - " + str(row) + " | Incomplete data - Positive referred patient"
+          checkStr = f"row - {row} | Incomplete data - Positive referred patient"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if testResult != 'Negative' and dotStatus == 'Complete' and (dotCat == '' or dotRpMth == '' or dotProvider == ''): 
-          checkStr = "row - " + str(row) + " | Incomplete data - DOT section"
+          checkStr = f"row - {row} | Incomplete data - DOT section"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         if testResult != 'Negative' and (dotStatus == 'Incomplete' or dotStatus == 'Not enrolled') and dotReason == '': 
-          checkStr = "row - " + str(row) + " | Incomplete data - DOT section"
+          checkStr = f"row - {row} | Incomplete data - DOT section"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
       checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
@@ -1456,11 +1456,11 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             providerSc = vilData[providerVc]['Sub-center_Name']
             providerVname = vilData[providerVc]['Name_of_Village']
             if cblRhc != providerRhc or cblSc != providerSc or cblAddr != providerVname:
-              checkStr = "row - " + str(row) + " | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. "+rpBy+"|"+providerVc+" '" + cblRhc + "'|'" + providerRhc + "', '" + cblSc + "'|'" + providerSc + "', '" + cblAddr + "'|'" + providerVname + "'"
+              checkStr = f"row - {row} | Provider RHC, SC, Village name/Address is not the same as those mentioned in All villages and All provider sheet. {rpBy} | {providerVc}, RHC - '{cblRhc}'|'{providerRhc}', SC - '{cblSc}'|'{providerSc}', Addredd - '{cblAddr}'|'{providerVname}'"
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       except:
 #         print(json.dumps(sData, indent=4))
-        checkStr = "row - " + str(row) + " | Person code not found in All provider sheet (" + rpBy + ")"
+        checkStr = f"row - {row} | Person code not found in All provider sheet ({rpBy})"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
     if len(check) > 0:
