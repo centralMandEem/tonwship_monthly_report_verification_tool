@@ -1354,7 +1354,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       cblYr = sData["Year in Carbonless"]
       cblYr = str(cblYr)
       cblYr = cblYr.replace(",","")
-      cblYr = int(cblYr)
+#       cblYr = int(cblYr)
       cblPg = sData["Carbonless Page No."]
       cblRow = sData["Carbonless Row No."]
       vc = sData["Village or Location Code of patient address if available"]
