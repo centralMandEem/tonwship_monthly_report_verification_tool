@@ -152,7 +152,7 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           providerCheckString = f'Provider is active but reason for removel is mentioned. ({providerPost} | {person})'
           allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
             
-        if removedDate == "" and allProviderData[providerPost][person]['Type_of_provider'] != "GP" and allProviderData[providerPost][person]['Type_of_provider'] != "PMI-EM Township level team" and \
+        if removedDate == "" and allProviderData[providerPost][person]['Type_of_provider'] != "GP" and allProviderData[providerPost][person]['Type_of_provider'] != "Private hospital" and allProviderData[providerPost][person]['Type_of_provider'] != "PMI-EM Township level team" and \
           (allProviderData[providerPost][person]['Township'] == '' or  allProviderData[providerPost][person]['Type_of_provider'] == '' or \
             allProviderData[providerPost][person]['Included_in_PMI_indicator_(Y/N)'] == '' or  allProviderData[providerPost][person]['ICMV_(Y/N)'] == '' or  allProviderData[providerPost][person]['Name_Of_Provider'] == '' or \
             allProviderData[providerPost][person]['Sex'] == '' or allProviderData[providerPost][person]['Assigned_village_code'] == '' or  allProviderData[providerPost][person]['Assigned_village_name'] == '' or  \
