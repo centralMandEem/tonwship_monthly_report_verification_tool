@@ -1399,6 +1399,16 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
       if tsp != '' or testResult != '':
         if cblYr != '' and cblMth != '' and date != '':
+          rpPeriodRpYr = rpYr
+          rpPeriodRpYr = str(rpPeriodRpYr).replace(",","")
+          rpPeriodRpYr = int(rpPeriodRpYr)
+          rpPeriodRpMth = rpMth
+          rpPeriodRpMthNum = month_mapping[rpPeriodRpMth] + 1
+          if rpPeriodRpMthNum == 13:
+            rpPeriodRpMthNum = 1
+            rpPeriodRpYr = rpPeriodRpYr + 1          
+          rpPeriodEnd = datetime(rpPeriodRpYr, rpPeriodRpMthNum, 1) - timedelta(days=1)
+          
           cblYrCalc = int(cblYr)
           cblMthNum = month_mapping[cblMth] + 1
           if cblMthNum == 13:
@@ -1408,6 +1418,9 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           testTimeStamp = datetime.strptime(date, '%d-%b-%Y')  
           if testTimeStamp > cblPeriodEnd:        
             checkStr = f"row - {row} | Blood testing date and month in carbonless is not consistent. Month in carbonless - {cblMth} | Year in carbonless - {cblYr} | Test date - {date}"
+            check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+          if cblPeriodEnd > rpPeriodEnd:
+            checkStr = f"row - {row} | Carbonless month and Year must not be later than reporting month and Year. Carbonless month-year - {cblMth}-{cblYr} | Reporting month-year - {rpMth}-{rpYr}"
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
         else:
           checkStr = f"row - {row} | One of month in carbonless, year in carbonless and/or test date is blank."
