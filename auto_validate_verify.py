@@ -319,9 +319,9 @@ def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr]])
 
 def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
-  ipcData = data["'IPC_additional'"]['data']
+  ipcData = data["IPC_additional"]['data']
   # print(json.dumps(ipcData, indent=4))
-  dataStartRow = int(data["'IPC_additional'"]['headerRow']) + 1
+  dataStartRow = int(data["IPC_additional"]['headerRow']) + 1
   ipcCheck = []
   if len(ipcData) > 0:
     for row, ipc in enumerate(ipcData, start=dataStartRow):
