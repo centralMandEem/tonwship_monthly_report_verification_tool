@@ -1,16 +1,8 @@
 #@title Before running this part of code. Make sure that the 2 files opened are the report file to be checked and the file to record the verification/validation findings { display-mode: "form" }
-from google.colab import auth
 import pandas as pd
 import json
 from datetime import datetime, timedelta
-auth.authenticate_user()
-
 import gspread
-from google.auth import default
-creds, _ = default()
-
-# gc = gspread.authorize(creds)
-# -------------------------------------------------------------------
 from pandas.core.arrays.string_ import FloatingDtype
 # Define functions
 # Function to convert column alphabet to column index
