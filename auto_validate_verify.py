@@ -1776,6 +1776,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
     ddRule[sheet][heading] = {}
 
     ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
+    print(ruleList)
     # print(dvRule['Target Sheet'] + " | " + heading)
     ddRule[dvRule['Target Sheet']][heading]['list'] = []
     for ruleItem in ruleList:
