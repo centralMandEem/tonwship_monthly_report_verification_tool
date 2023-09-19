@@ -1609,7 +1609,8 @@ def getSheetData(service, url):
             except (ValueError, TypeError):
                 pass  # If it's not a numeric value, leave it as is
     lod = list_of_lists_to_list_of_dicts(range['values'])
-    data[title] = lod
+    data[title]['lod'] = lod
+    data[title]['lol'] = range['values']
   return data
     
 def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sh_name):
@@ -1623,10 +1624,11 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
   fixTool = getSheetData(gc, url_of_fix_tool)
-  headers = fixTool['tbl_header_1']
-  dvRules = fixTool['dv_dropdown_1']
-  numRules = fixTool['dv_number_1']
-  dateRules = fixTool['dv_date_1']
+  headers = fixTool['tbl_header_1']['lod']
+  dvRules = fixTool['dv_dropdown_1']['lod']
+  numRules = fixTool['dv_number_1']['lod']
+  dateRules = fixTool['dv_date_1']['lod']
+  dvRulesLol = fixTool['dv_dropdown_1']['lol']
   
   sheetListTmp = headers
   sheetListTmp
@@ -1776,7 +1778,9 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
     ddRule[sheet][heading] = {}
 
     ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
+    ruleListLol = dvRulesLol[col_to_num(dvRule['Rule column'])]
     print(ruleList)
+    print(ruleListLol)
     # print(dvRule['Target Sheet'] + " | " + heading)
     ddRule[dvRule['Target Sheet']][heading]['list'] = []
     for ruleItem in ruleList:
