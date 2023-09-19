@@ -1577,13 +1577,13 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
     else:
         verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK']])
 
-def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sheet_name_to_save_findings):
+def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sh_name):
   # -----------------------------------------------------------------------------
   # function call
   # fixTool
   print(f"report file link: {url_of_report_file}")
   print(f"findings file link: {url_of_verification_file}")
-  print(f"sheet name: {sheet_name_to_save_findings}")
+  print(f"sheet name: {sh_name}")
   gc = gspread.service_account_from_dict(service_account_info)
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
 
@@ -1591,7 +1591,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   rpFile = gc.open_by_url(url_of_report_file)
   fixTool = gc.open_by_url(url_of_fix_tool)
 
-  verifyFindingSheet = verificationFile.worksheet(sheet_name_to_save_findings)
+  verifyFindingSheet = verificationFile.worksheet(sh_name)
   rpVar = rpFile.worksheet('var')
   fixToolDvDropDown = fixTool.worksheet('dv_dropdown')
   fixToolNum = fixTool.worksheet('dv_number')
