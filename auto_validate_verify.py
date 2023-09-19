@@ -205,7 +205,7 @@ def checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName
 
 # checking Potential malaria outbreak sheet
 def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
-  pmoData = data['Potential malaria outbreak']['data']
+  pmoData = data["'Potential malaria outbreak'"]['data']
   dataStartRow = int(data['Potential malaria outbreak']['headerRow']) + 1
   pmoCheck = []
   if len(pmoData) > 0:
