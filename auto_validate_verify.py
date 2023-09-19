@@ -206,7 +206,7 @@ def checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName
 # checking Potential malaria outbreak sheet
 def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
   pmoData = data["'Potential malaria outbreak'"]['data']
-  dataStartRow = int(data['Potential malaria outbreak']['headerRow']) + 1
+  dataStartRow = int(data["'Potential malaria outbreak'"]['headerRow']) + 1
   pmoCheck = []
   if len(pmoData) > 0:
     for row, pmo in enumerate(pmoData, start=dataStartRow):
@@ -361,7 +361,7 @@ def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr]])
 
 def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  ghtData = data["GHT,Worksite HE"]['data']
+  ghtData = data["'GHT,Worksite HE'"]['data']
   # print(json.dumps(ghtData, indent=4))
   dataStartRow = int(data['GHT,Worksite HE']['headerRow']) + 1
   ghtCheck = []
@@ -414,7 +414,7 @@ def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr]])
 
 def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  llinData = data["LLIN dist(mass,continuous)"]['data']
+  llinData = data["'LLIN dist(mass,continuous)'"]['data']
   # print(json.dumps(llinData, indent=4))
   dataStartRow = int(data['LLIN dist(mass,continuous)']['headerRow']) + 1
   llinCheck = []
@@ -494,7 +494,7 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr]])
 
 def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  ancData = data["LLIN dist(ANC)"]['data']
+  ancData = data["'LLIN dist(ANC)'"]['data']
   # print(json.dumps(ancData, indent=4))
   dataStartRow = int(data['LLIN dist(ANC)']['headerRow']) + 1
   ancCheck = []
@@ -547,7 +547,7 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr]])
 
 def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  llinOtherData = data["LLIN dist(Other)"]['data']
+  llinOtherData = data["'LLIN dist(Other)'"]['data']
   # print(json.dumps(llinOtherData, indent=4))
   dataStartRow = int(data['LLIN dist(Other)']['headerRow']) + 1
   llinOtherCheck = []
@@ -635,7 +635,7 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  c19Data = data["C19 material distribution"]['data']
+  c19Data = data["'C19 material distribution'"]['data']
   # print(json.dumps(c19Data, indent=4))
   dataStartRow = int(data['C19 material distribution']['headerRow']) + 1
   c19Check = []
@@ -677,9 +677,9 @@ def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  iecData = data["IEC,material distribution"]['data']
+  iecData = data["'IEC,material distribution'"]['data']
   # print(json.dumps(iecData, indent=4))
-  dataStartRow = int(data['IEC,material distribution']['headerRow']) + 1
+  dataStartRow = int(data["'IEC,material distribution'"]['headerRow']) + 1
   iecCheck = []
   if len(iecData) > 0:
     for row, iec in enumerate(iecData, start=dataStartRow):
@@ -718,9 +718,9 @@ def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  commoData = data["RDT,ACT,CQ,PQ distribution"]['data']
+  commoData = data["'RDT,ACT,CQ,PQ distribution'"]['data']
   # print(json.dumps(commoData, indent=4))
-  dataStartRow = int(data['RDT,ACT,CQ,PQ distribution']['headerRow']) + 1
+  dataStartRow = int(data["'RDT,ACT,CQ,PQ distribution'"]['headerRow']) + 1
   commoCheck = []
   if len(commoData) > 0:
     for row, commo in enumerate(commoData, start=dataStartRow):
@@ -784,9 +784,9 @@ def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  cboData = data["CBO,CSG,EHO support"]['data']
+  cboData = data["'CBO,CSG,EHO support'"]['data']
   # print(json.dumps(cboData, indent=4))
-  dataStartRow = int(data['CBO,CSG,EHO support']['headerRow']) + 1
+  dataStartRow = int(data["'CBO,CSG,EHO support'"]['headerRow']) + 1
   cboCheck = []
   if len(cboData) > 0:
     for row, cbo in enumerate(cboData, start=dataStartRow):
@@ -818,7 +818,7 @@ def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  nameOfSheet = "Design,develop"
+  nameOfSheet = "'Design,develop'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -854,7 +854,7 @@ def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  nameOfSheet = "Study,assessment,survey"
+  nameOfSheet = "'Study,assessment,survey'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -920,7 +920,7 @@ def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
-  nameOfSheet = "Training,Meeting,Workshop"
+  nameOfSheet = "'Training,Meeting,Workshop'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -975,7 +975,7 @@ def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   providerData = data["All_provider"]['data']
-  nameOfSheet = "Meeting,supervision,stockout"
+  nameOfSheet = "'Meeting,supervision,stockout'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -1080,7 +1080,7 @@ def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   providerData = data["All_provider"]['data']
-  nameOfSheet = "Training attendance (Provider)"
+  nameOfSheet = "'Training attendance (Provider)'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -1214,7 +1214,7 @@ def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
 def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  nameOfSheet = "CSG (small grant)"
+  nameOfSheet = "'CSG (small grant)'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -1251,7 +1251,7 @@ def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
 
 def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
-  nameOfSheet = "ICMV other disease"
+  nameOfSheet = "'ICMV other disease'"
   resData = data[nameOfSheet]['data']
   # print(json.dumps(resData, indent=4))
   dataStartRow = int(data[nameOfSheet]['headerRow']) + 1
@@ -1310,7 +1310,7 @@ def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
   providerData = data['All_provider']['data']
-  nameOfSheet = "Patient record"
+  nameOfSheet = "'Patient record'"
   resData = data[nameOfSheet]['data']
   
   month_mapping = {
