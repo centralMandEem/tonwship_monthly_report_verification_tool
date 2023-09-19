@@ -1609,6 +1609,7 @@ def getSheetData(service, url):
             except (ValueError, TypeError):
                 pass  # If it's not a numeric value, leave it as is
     lod = list_of_lists_to_list_of_dicts(range['values'])
+    data[title] = {}
     data[title]['lod'] = lod
     data[title]['lol'] = range['values']
   return data
