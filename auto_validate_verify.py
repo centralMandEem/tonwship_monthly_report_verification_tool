@@ -1647,7 +1647,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   rpVar = rpFile.worksheet('var')
 
   url_of_report_file = 'https://docs.google.com/spreadsheets/d/1Kdr59_aaRVp5bnEr-_rnrRbpZ_3J-CoQu5RxGfbzYYA/edit#gid=451141657'
-  reportFile = service.open_by_url(url_of_report_file)
+  reportFile = gc.open_by_url(url_of_report_file)
   reportSheetList = reportFile.worksheets()
   reportSheetTitles = [rpsheet.title for rpsheet in reportSheetList]
   reportData = reportFile.values_batch_get(reportSheetTitles)
