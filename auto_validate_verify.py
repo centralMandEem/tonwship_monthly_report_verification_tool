@@ -1788,8 +1788,8 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
 
     # ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
     ruleList = rpVarVal[col_to_num(dvRule['Rule column']) - 1]
-    print(ruleList)
-    print(ruleListLol)
+    # print(ruleList)
+    # print(ruleListLol)
     # print(dvRule['Target Sheet'] + " | " + heading)
     ddRule[dvRule['Target Sheet']][heading]['list'] = []
     for ruleItem in ruleList:
