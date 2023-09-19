@@ -254,9 +254,9 @@ def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 
 def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
-  plaData = data["PLA session"]['data']
+  plaData = data["'PLA session'"]['data']
   # print(json.dumps(plaData, indent=4))
-  dataStartRow = int(data['PLA session']['headerRow']) + 1
+  dataStartRow = int(data["'PLA session'"]['headerRow']) + 1
   plaCheck = []
   if len(plaData) > 0:
     for row, pla in enumerate(plaData, start=dataStartRow):
@@ -319,9 +319,9 @@ def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr]])
 
 def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
-  ipcData = data["IPC_additional"]['data']
+  ipcData = data["'IPC_additional'"]['data']
   # print(json.dumps(ipcData, indent=4))
-  dataStartRow = int(data['IPC_additional']['headerRow']) + 1
+  dataStartRow = int(data["'IPC_additional'"]['headerRow']) + 1
   ipcCheck = []
   if len(ipcData) > 0:
     for row, ipc in enumerate(ipcData, start=dataStartRow):
@@ -363,7 +363,7 @@ def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ghtData = data["'GHT,Worksite HE'"]['data']
   # print(json.dumps(ghtData, indent=4))
-  dataStartRow = int(data['GHT,Worksite HE']['headerRow']) + 1
+  dataStartRow = int(data["'GHT,Worksite HE'"]['headerRow']) + 1
   ghtCheck = []
   if len(ghtData) > 0:
     for row, ght in enumerate(ghtData, start=dataStartRow):
@@ -416,7 +416,7 @@ def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinData = data["'LLIN dist(mass,continuous)'"]['data']
   # print(json.dumps(llinData, indent=4))
-  dataStartRow = int(data['LLIN dist(mass,continuous)']['headerRow']) + 1
+  dataStartRow = int(data["'LLIN dist(mass,continuous)'"]['headerRow']) + 1
   llinCheck = []
   if len(llinData) > 0:
     for row, llin in enumerate(llinData, start=dataStartRow):
@@ -496,7 +496,7 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ancData = data["'LLIN dist(ANC)'"]['data']
   # print(json.dumps(ancData, indent=4))
-  dataStartRow = int(data['LLIN dist(ANC)']['headerRow']) + 1
+  dataStartRow = int(data["'LLIN dist(ANC)'"]['headerRow']) + 1
   ancCheck = []
   if len(ancData) > 0:
     for row, anc in enumerate(ancData, start=dataStartRow):
@@ -549,7 +549,7 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
 def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinOtherData = data["'LLIN dist(Other)'"]['data']
   # print(json.dumps(llinOtherData, indent=4))
-  dataStartRow = int(data['LLIN dist(Other)']['headerRow']) + 1
+  dataStartRow = int(data["'LLIN dist(Other)'"]['headerRow']) + 1
   llinOtherCheck = []
   if len(llinOtherData) > 0:
     for row, llinOther in enumerate(llinOtherData, start=dataStartRow):
@@ -637,7 +637,7 @@ def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
   c19Data = data["'C19 material distribution'"]['data']
   # print(json.dumps(c19Data, indent=4))
-  dataStartRow = int(data['C19 material distribution']['headerRow']) + 1
+  dataStartRow = int(data["'C19 material distribution'"]['headerRow']) + 1
   c19Check = []
   if len(c19Data) > 0:
     for row, c19 in enumerate(c19Data, start=dataStartRow):
