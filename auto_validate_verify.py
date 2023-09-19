@@ -1624,9 +1624,9 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
   fixTool = getSheetData(gc, url_of_fix_tool)
   headers = fixTool['tbl_header_1']
-  dvRules = fixTool['dv_dropdown']
-  numRules = fixTool['dv_number']
-  dateRules = fixTool['dv_date']
+  dvRules = fixTool['dv_dropdown_1']
+  numRules = fixTool['dv_number_1']
+  dateRules = fixTool['dv_date_1']
   
   sheetListTmp = headers
   sheetListTmp
