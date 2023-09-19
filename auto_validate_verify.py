@@ -1645,9 +1645,6 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   verifyFindingSheet = verificationFile.worksheet(sh_name)
   verifyFindingSheet.clear()
   verifyFindingSheet.update("A1:E1",[["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
-  
-  rpFile = gc.open_by_url(url_of_report_file) 
-  rpVar = rpFile.worksheet('var')
 
   url_of_report_file = 'https://docs.google.com/spreadsheets/d/1Kdr59_aaRVp5bnEr-_rnrRbpZ_3J-CoQu5RxGfbzYYA/edit#gid=451141657'
   reportFile = gc.open_by_url(url_of_report_file)
@@ -1730,8 +1727,6 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   headers = tmpHeader
   tmpHeader = None
 
-  tmpRule = rpVar.get("H2:H")
-  # print(tmpRule)
   dRule = {}
   for dateRule in dateRules:
     sheet = dateRule['Target Sheet']
@@ -1767,8 +1762,21 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
     except:
       value2 = 0.0
     nRule[sheet][heading] = {}
-    nRule[sheet][heading]['list'] = [value1,value2]
-
+    nRule[sheet][heading]['list'] = [value1,value2]  
+  
+  rpFile = gc.open_by_url(url_of_report_file) 
+  rpVar = rpFile.worksheet('var')
+  rpVarx = rpVar.get_all_values()
+  pdKey = rpVarx[0]
+  pdVal = rpVarx[1:]
+  df = pd.DataFrame(pdVal,columns=pdKey)
+  df.replace('', pd.NA, inplace=True)
+  rpVarVal = []
+  for column_name, column_data in df.items():
+      coldatax = column_data.dropna().to_list()
+      coldata = [[coldataxx] for coldataxx in coldatax]
+      rpVarVal.append(coldata)
+  
   ddRule = {}
   for dvRule in dvRules:
     sheet = dvRule['Target Sheet']
@@ -1778,8 +1786,8 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
       ddRule[sheet] = {}
     ddRule[sheet][heading] = {}
 
-    ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
-    ruleListLol = dvRulesLol[col_to_num(dvRule['Rule column'])]
+    # ruleList = rpVar.get(dvRule["Rule column"] + str(2) + ":" + dvRule["Rule column"])
+    ruleList = rpVarVal[col_to_num(dvRule['Rule column']) - 1]
     print(ruleList)
     print(ruleListLol)
     # print(dvRule['Target Sheet'] + " | " + heading)
