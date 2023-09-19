@@ -1581,6 +1581,9 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   # -----------------------------------------------------------------------------
   # function call
   # fixTool
+  print(f"report file link: {url_of_report_file}")
+  print(f"findings file link: {url_of_verification_file}")
+  print(f"sheet name: {sheet_name_to_save_findings}")
   gc = gspread.service_account_from_dict(service_account_info)
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
 
