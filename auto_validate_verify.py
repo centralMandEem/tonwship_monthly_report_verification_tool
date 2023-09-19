@@ -1588,7 +1588,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   rpFile = gc.open_by_url(url_of_report_file)
   fixTool = gc.open_by_url(url_of_fix_tool)
 
-  verifyFindingSheet = verificationFile.worksheet('Findings')
+  verifyFindingSheet = verificationFile.worksheet('sheet_name_to_save_findings')
   rpVar = rpFile.worksheet('var')
   fixToolDvDropDown = fixTool.worksheet('dv_dropdown')
   fixToolNum = fixTool.worksheet('dv_number')
