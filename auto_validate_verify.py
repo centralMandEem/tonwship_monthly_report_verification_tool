@@ -1577,6 +1577,41 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
     else:
         verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK']])
 
+def list_of_lists_to_list_of_dicts(list_of_lists):
+    keys = list_of_lists[0]
+    list_of_dicts = []
+    for values in list_of_lists[1:]:
+        if len(values) < len(keys):
+            values += [''] * (len(keys) - len(values))
+        dict_from_list = dict(zip(keys, values))
+        list_of_dicts.append(dict_from_list)
+    return list_of_dicts
+
+def getSheetData(service, url):
+  spreadsheet = service.open_by_url(url)
+  worksheets = spreadsheet.worksheets()
+  sheetTitles = [sheet.title for sheet in worksheets]
+  ranges = spreadsheet.values_batch_get(sheetTitles)
+  ranges = ranges['valueRanges']
+  data = {}
+  for range in ranges:
+    title = range['range']
+    title = title.split("!")[0]
+    # Convert numeric values to integers or floats based on their type
+    for row in range['values']:
+        for i, cell_value in enumerate(row):
+            try:
+                float_value = float(cell_value)
+                if float_value.is_integer():
+                    row[i] = int(float_value)  # Convert to integer if it's an integer
+                else:
+                    row[i] = float_value  # Otherwise, keep it as a float
+            except (ValueError, TypeError):
+                pass  # If it's not a numeric value, leave it as is
+    lod = list_of_lists_to_list_of_dicts(range['values'])
+    data[title] = lod
+  return data
+    
 def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sh_name):
   # -----------------------------------------------------------------------------
   # function call
@@ -1585,26 +1620,14 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   print(f"findings file link: {url_of_verification_file}")
   print(f"sheet name: {sh_name}")
   gc = gspread.service_account_from_dict(service_account_info)
+  
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
-
-  verificationFile = gc.open_by_url(url_of_verification_file)
-  rpFile = gc.open_by_url(url_of_report_file)
-  fixTool = gc.open_by_url(url_of_fix_tool)
-
-  verifyFindingSheet = verificationFile.worksheet(sh_name)
-  rpVar = rpFile.worksheet('var')
-  fixToolDvDropDown = fixTool.worksheet('dv_dropdown')
-  fixToolNum = fixTool.worksheet('dv_number')
-  fixToolDate = fixTool.worksheet('dv_date')
-  fixToolTblHeader = fixTool.worksheet('tbl_header')
-  headers = fixToolTblHeader.get_all_records()
-  dvRules = fixToolDvDropDown.get_all_records()
-  numRules = fixToolNum.get_all_records()
-  dateRules = fixToolDate.get_all_records()
-
-  verifyFindingSheet.clear()
-  verifyFindingSheet.update("A1:E1",[["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
-
+  fixTool = getSheetData(gc, url_of_fix_tool)
+  headers = fixTool['tbl_header']
+  dvRules = fixTool['dv_dropdown']
+  numRules = fixTool['dv_number']
+  dateRules = fixTool['dv_date']
+  
   sheetListTmp = headers
   sheetListTmp
   sheetList = {}
@@ -1614,14 +1637,49 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
       sheetList[sheetData['Target sheet']]['headerRow'] = sheetData['Target row']
   sheetList['Recruitment'] = {}
   sheetList['Recruitment']['headerRow'] = 1
+  
+  verificationFile = gc.open_by_url(url_of_verification_file)
+  verifyFindingSheet = verificationFile.worksheet(sh_name)
+  verifyFindingSheet.clear()
+  verifyFindingSheet.update("A1:E1",[["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
+  
+  rpFile = gc.open_by_url(url_of_report_file) 
+  rpVar = rpFile.worksheet('var')
 
-  # sheetList
-  reportFile = gc.open_by_url(url_of_report_file)
+  url_of_report_file = 'https://docs.google.com/spreadsheets/d/1Kdr59_aaRVp5bnEr-_rnrRbpZ_3J-CoQu5RxGfbzYYA/edit#gid=451141657'
+  reportFile = service.open_by_url(url_of_report_file)
+  reportSheetList = reportFile.worksheets()
+  reportSheetTitles = [rpsheet.title for rpsheet in reportSheetList]
+  reportData = reportFile.values_batch_get(reportSheetTitles)
+  reportData = reportData['valueRanges']
+  tmpSet = {}
+  for tmpData in reportData:
+    shName = tmpData['range'].split("!")[0]
+    tmpSet[shName] = tmpData['values']
+  
+  # print(tmpSet.keys())
   for sheetName in sheetList:
-    sheet = reportFile.worksheet(sheetName)
-    data = sheet.get_all_records(empty2zero=False, head=sheetList[sheetName]['headerRow'], default_blank='')
-    json_data = json.loads(json.dumps(data))
-    sheetList[sheetName]['data'] = json_data
+    # print(f"Present in tmpSet - {sheetName}")
+    header = sheetList[sheetName]['headerRow'] - 1
+    if header > 0:
+      #this code will run
+      del tmpSet[sheetName][:header]
+    # Convert numeric values to integers or floats based on their type
+    for row in tmpSet[sheetName]:
+        for i, cell_value in enumerate(row):
+            originalVal = cell_value
+            modVal = cell_value.replace(",","")
+            try:
+                float_value = float(modVal)
+                if float_value.is_integer():
+                    row[i] = int(float_value)  # Convert to integer if it's an integer
+                else:
+                    row[i] = float_value  # Otherwise, keep it as a float
+            except (ValueError, TypeError):
+                if cell_value != originalVal:
+                    print(f"value changed: from {originalVal} to {cell_value}")
+                pass  # If it's not a numeric value, leave it as is
+    sheetList[sheetName]['data'] = list_of_lists_to_list_of_dicts(tmpSet[sheetName])
 
   mainOrg = ''
   mainSr = ''
