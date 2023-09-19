@@ -9,7 +9,7 @@ import gspread
 from google.auth import default
 creds, _ = default()
 
-gc = gspread.authorize(creds)
+# gc = gspread.authorize(creds)
 # -------------------------------------------------------------------
 from pandas.core.arrays.string_ import FloatingDtype
 # Define functions
@@ -1585,10 +1585,11 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
     else:
         verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK']])
 
-def validata_or_verify_report(url_of_report_file, url_of_verification_file, sheet_name_to_save_findings):
+def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sheet_name_to_save_findings):
   # -----------------------------------------------------------------------------
   # function call
   # fixTool
+  gc = gspread.service_account_from_dict(service_account_info)
   url_of_fix_tool = 'https://docs.google.com/spreadsheets/d/1ZfJFnP6GZSwwpXGeIv8r8B3GO_yfHHPWWi1jJp7tfhg/edit#gid=39027120'
 
   verificationFile = gc.open_by_url(url_of_verification_file)
