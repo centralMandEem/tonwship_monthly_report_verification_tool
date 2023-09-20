@@ -17,12 +17,12 @@ def col_to_num(col_str):
 
 # Function to convert string to number
 def convert2float(data):
-  try:
-    newD = float(str(data).replace(",", ""))
-  except:
-    newD = 0
-  # print("Converting " + str(data) + " | new data = " + str(newD))
-  return newD
+    try:
+        newD = float(str(data).replace(",", ""))
+    except:
+        newD = 0
+    # print("Converting " + str(data) + " | new data = " + str(newD))
+    return newD
 
 # Checking All_villages sheet
 def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
@@ -115,13 +115,11 @@ def checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           villageCheckString = f'row - {row} | VMW/PP_(Y/N) is not consistent with All_provider sheet. ({vc})'
           allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet', villageCheckString])
 
-    if len(allVillCheck) > 0:
-      verifyFindingSheet.append_rows(allVillCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'All_villages sheet','OK']])
+    if len(allVillCheck) == 0:
+      allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet','OK'])
   else:
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'All_villages sheet','No data']])
-
+    allVillCheck.append([mainOrg, mainSr, mainTsp, 'All_villages sheet','No data'])
+  return allVillCheck
 
 # Checking All_provider sheet
 def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
@@ -155,53 +153,55 @@ def checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if activeProvider > 1:
         providerCheckString = f'There are more than 1 active provider for the same provider post code ({providerPost} | {person})'
         allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet', providerCheckString])
-    if len(allProviderCheck) > 0:
-      verifyFindingSheet.append_rows(allProviderCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'All_provider sheet','OK']])
+    if len(allProviderCheck) == 0:
+      allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet','OK'])
   else:
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'All_provider sheet','No data']])
+    allProviderCheck.append([mainOrg, mainSr, mainTsp, 'All_provider sheet','No data'])
+  return allProviderCheck
 
 # checking reporting period
 def checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, shName, row, rpMth, rpYr):
   rpYr = convert2float(rpYr)
   row = row
   rpMth = rpMth
+  rpPeriodCheck =[]
   if rpYr > 0 and rpYr == 2023 and (rpMth == 'October' or rpMth == 'November' or rpMth == 'December'):
     checkStr = f"row - {row} | Future reporting period found ({rpMth} {rpYr})"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+    rpPeriodCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
   elif rpYr > 0 and rpYr == 2022 and rpMth != 'October' and rpMth != 'November' and rpMth != 'December':
     checkStr = f"row - {row} | Reporting period of previous fiscal year found ({rpMth} {rpYr})"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
-#   if rpYr == 0:
-#     checkStr = f"row - {row} | Reporting year error found. {rpMth} {rpYr})"
-#     verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+    rpPeriodCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
+  return rpPeriodCheck
 
 # checking village code, rhc, sc, village name
 def checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, vc, rhc, sc, vname, vow=None):
   vilData = data['All_villages']['data']
+  vcCheck = []
   if vc!= '' and len(vc) != 12:
     checkStr = f"row - {row} | Village code format error"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+    vcCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
   if vow==None:
     if vc != '' and vc[-4:] != '9999' and vc[-4:] != '9998' and len(vc) == 12 and (rhc != vilData[vc]['RHC_Name'] or sc != vilData[vc]['Sub-center_Name'] or vname != vilData[vc]['Name_of_Village']):
       checkStr = f"row - {row} | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+      vcCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
   else:
     if vc != '' and vc[-4:] != '9999' and vc[-4:] != '9998' and len(vc) == 12 and (rhc != vilData[vc]['RHC_Name'] or sc != vilData[vc]['Sub-center_Name'] or vname != vilData[vc]['Name_of_Village'] or vow != vilData[vc]['Village/Worksite']):
       checkStr = f"row - {row} | Village code, RHC, Subcenter, village name or Village/Worksite is not exactly the same as those mentioned in All_villages sheet"
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+      vcCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
+  return vcCheck
 
 # checking personCode and type of provider
 def checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, shName, row, personCode, providerType):
   providerData = data['All_provider']['data']
+  providerTypeCheck = []
   if personCode != '' and len(personCode) != 9:
     checkStr = f"row - {row} | Person code format error"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+    providerTypeCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
 
   if personCode != '' and len(personCode) == 9 and providerData[personCode[:-2]][personCode]['Type_of_provider'] != providerType:
     checkStr = f"row - {row} | Provider code and provider type is not exactly the same as those mentioned in All_provider sheet"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, shName, checkStr]])
+    providerTypeCheck.append([mainOrg, mainSr, mainTsp, shName, checkStr])
+  return providerTypeCheck
 
 # checking Potential malaria outbreak sheet
 def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
@@ -241,16 +241,15 @@ def checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data. Outbreak occur and start date not mentioned."
         pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)   
+      pmoCheck = pmoCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
+      pmoCheck = pmoCheck + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)   
 
-    if len(pmoCheck) > 0:
-      verifyFindingSheet.append_rows(pmoCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', 'OK']])
+    if len(pmoCheck) == 0:
+      pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr]])
+    pmoCheck.append([mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', checkStr])
+  return pmoCheck
 
 def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
@@ -307,16 +306,15 @@ def checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Village code, RHC, Subcenter or village name is not exactly the same as those mentioned in All_villages sheet"
         plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)    
+      plaCheck = plaCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Potential malaria outbreak sheet', row, rpMth, rpYr)
+      plaCheck = plaCheck + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Potential malaria outbreak sheet', row, vc, rhc, sc, vname)    
       
-    if len(plaCheck) > 0:
-      verifyFindingSheet.append_rows(plaCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'PLA session sheet', 'OK']])
+    if len(plaCheck) == 0:
+      plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr]])
+    plaCheck.append([mainOrg, mainSr, mainTsp, 'PLA session sheet', checkStr])
+  return plaCheck
 
 def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):  
   ipcData = data["IPC_additional"]['data']
@@ -349,16 +347,15 @@ def checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp,'IPC_additional sheet', row, rpMth, rpYr)
-      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'IPC_additional sheet', row, personCode, providerType)
+      ipcCheck = ipcCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp,'IPC_additional sheet', row, rpMth, rpYr)
+      ipcCheck = ipcCheck + checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'IPC_additional sheet', row, personCode, providerType)
       
-    if len(ipcCheck) > 0:
-      verifyFindingSheet.append_rows(ipcCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IPC_additional sheet', 'OK']])
+    if len(ipcCheck) == 0:
+      ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr]])
+    ipcCheck.append([mainOrg, mainSr, mainTsp, 'IPC_additional sheet', checkStr])
+  return ipcCheck
 
 def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ghtData = data["'GHT,Worksite HE'"]['data']
@@ -401,17 +398,16 @@ def checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', row, rpMth, rpYr)
-      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet', row, personCode, providerType)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet sheet', row, vc, rhc, sc, vname, vow)
+      ghtCheck = ghtCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', row, rpMth, rpYr)
+      ghtCheck = ghtCheck + checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet', row, personCode, providerType)
+      ghtCheck = ghtCheck + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'GHT,Worksite HE sheet sheet', row, vc, rhc, sc, vname, vow)
       
-    if len(ghtCheck) > 0:
-      verifyFindingSheet.append_rows(ghtCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', 'OK']])
+    if len(ghtCheck) == 0:
+      ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr]])
+    ghtCheck.append([mainOrg, mainSr, mainTsp, 'GHT,Worksite HE sheet', checkStr])
+  return ghtCheck
 
 def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinData = data["'LLIN dist(mass,continuous)'"]['data']
@@ -482,16 +478,15 @@ def checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Location is not worksite but type of worksite is mentioned"
         llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
 
-      checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
+      llinCheck = llinCheck + checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', row, rpMth, rpYr)
+      llinCheck = llinCheck + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'LLIN dist(mass,continuous) sheet', row, vc, rhc, sc, vname, vow)
       
-    if len(llinCheck) > 0:
-      verifyFindingSheet.append_rows(llinCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', 'OK']])
+    if len(llinCheck) == 0:
+      llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr]])
+    llinCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(mass,continuous) sheet', checkStr])
+  return llinCheck
 
 def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   ancData = data["'LLIN dist(ANC)'"]['data']
@@ -536,15 +531,14 @@ def checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Distributed LLIN is more than pregnant women attended"
         ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
         
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', row, rpMth, rpYr)
+      ancCheck = ancCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', row, rpMth, rpYr)
       
-    if len(ancCheck) > 0:
-      verifyFindingSheet.append_rows(ancCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', 'OK']])
+    if len(ancCheck) == 0:
+      ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr]])
+    ancCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(ANC) sheet', checkStr])
+  return ancCheck
 
 def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   llinOtherData = data["'LLIN dist(Other)'"]['data']
@@ -573,15 +567,14 @@ def checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', row, rpMth, rpYr)
+      llinOtherCheck = llinOtherCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', row, rpMth, rpYr)
       
-    if len(llinOtherCheck) > 0:
-      verifyFindingSheet.append_rows(llinOtherCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', 'OK']])
+    if len(llinOtherCheck) == 0:
+      llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr]])
+    llinOtherCheck.append([mainOrg, mainSr, mainTsp, 'LLIN dist(Other) sheet', checkStr])
+  return llinOtherCheck
 
 def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -621,17 +614,16 @@ def checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Recruitment sheet', row, rpMth, rpYr)
+      recruitCheck = recruitCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'Recruitment sheet', row, rpMth, rpYr)
       if vc!= '':
-        checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Recruitment sheet', row, vc, rhc,sc,vname)
+        recruitCheck = recruitCheck + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, 'Recruitment sheet', row, vc, rhc,sc,vname)
       
-    if len(recruitCheck) > 0:
-      verifyFindingSheet.append_rows(recruitCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Recruitment sheet', 'OK']])
+    if len(recruitCheck) == 0:
+      recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr]])
+    recruitCheck.append([mainOrg, mainSr, mainTsp, 'Recruitment sheet', checkStr])
+  return recruitCheck
 
 def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -665,15 +657,14 @@ def checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', row, rpMth, rpYr)
+      c19Check = c19Check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', row, rpMth, rpYr)
       
-    if len(c19Check) > 0:
-      verifyFindingSheet.append_rows(c19Check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', 'OK']])
+    if len(c19Check) == 0:
+      c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr]])
+    c19Check.append([mainOrg, mainSr, mainTsp, 'C19 material distribution sheet', checkStr])
+  return c19Check
 
 def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -706,15 +697,14 @@ def checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | 0 or blank activity data doesn't need to be mentioned in the report"
         iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', row, rpMth, rpYr)
+      iecCheck = iecCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', row, rpMth, rpYr)
       
-    if len(iecCheck) > 0:
-      verifyFindingSheet.append_rows(iecCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', 'OK']])
+    if len(iecCheck) == 0:
+      iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr]])
+    iecCheck.append([mainOrg, mainSr, mainTsp, 'IEC,material distribution sheet', checkStr])
+  return iecCheck
 
 def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -740,15 +730,14 @@ def checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Do not need to report this activity by State/Region or Township team. This is URC central logistic team's activity"
         commoCheck.append([mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', row, rpMth, rpYr)
+      commoCheck = commoCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', row, rpMth, rpYr)
       
-    if len(commoCheck) > 0:
-      verifyFindingSheet.append_rows(commoCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', 'OK']])
+    if len(commoCheck) == 0:
+      commoCheck.append([mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr]])
+    commoCheck.append([mainOrg, mainSr, mainTsp, 'RDT,ACT,CQ,PQ distribution sheet', checkStr])
+  return commoCheck
 
 def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -772,15 +761,14 @@ def checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
       if amtNum > 0 or (amtNum <=0 and (wpNum != '' or activity != '' or item != '')):
         checkStr = f"row - {row} | Do not need to report this activity by State/Region or Township team. This is URC and Partner central teams' activity"
         procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'procurement sheet', row, rpMth, rpYr)
+      procureCheck = procureCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'procurement sheet', row, rpMth, rpYr)
       
-    if len(procureCheck) > 0:
-      verifyFindingSheet.append_rows(procureCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'procurement sheet', 'OK']])
+    if len(procureCheck) == 0:
+      procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr]])
+    procureCheck.append([mainOrg, mainSr, mainTsp, 'procurement sheet', checkStr])
+  return procureCheck
 
 def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -806,15 +794,14 @@ def checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = f"row - {row} | Incomplete data"
           cboCheck.append([mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', row, rpMth, rpYr)
+      cboCheck = cboCheck + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', row, rpMth, rpYr)
       
-    if len(cboCheck) > 0:
-      verifyFindingSheet.append_rows(cboCheck)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', 'OK']])
+    if len(cboCheck) == 0:
+      cboCheck.append([mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr]])
+    cboCheck.append([mainOrg, mainSr, mainTsp, 'CBO,CSG,EHO support sheet', checkStr])
+  return cboCheck
 
 def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -842,15 +829,14 @@ def checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = f"row - {row} | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+      check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -877,13 +863,12 @@ def checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, dat
           checkStr = f"row - {row} | Incomplete data"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -910,13 +895,12 @@ def checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -962,15 +946,14 @@ def checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+      check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -1063,19 +1046,18 @@ def checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
             checkStr = f"row - {row} | Other visit - Stockout data reported without mentioning the visit. ({personCode})" 
             check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-          checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+          check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
 
         except:
           checkStr = "row - " + str(row) + " | Person code not found in All provider sheet"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   # print(data.keys())
@@ -1146,19 +1128,18 @@ def checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
               checkStr = f"row - {row} | {personCode} received full package of Diagnosis and case management and has not been reported as PMI indicator. Suggested to report as PMI indicator or change 'full' to 'partial'" 
               check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-          checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+          check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
         except:
           checkStr = "row - " + str(row) + " | Person code not found in All provider sheet. (" + personCode + ")" 
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
-  verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Training PMI indicator summary sheet', 'Please check it manually']])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  check.append([mainOrg, mainSr, mainTsp, 'Training PMI indicator summary sheet', 'Please check it manually'])
+  return check
 
 def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "CSG"
@@ -1202,16 +1183,15 @@ def checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
+      check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+      check = check + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+  return check
 
 def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "'CSG (small grant)'"
@@ -1239,16 +1219,15 @@ def checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
+      check = check + checkRpPeriod (verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+      check = check + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + " sheet", row, vc, rhc, sc,vname)
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   nameOfSheet = "'ICMV other disease'"
@@ -1295,17 +1274,16 @@ def checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Incomplete data"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet', row, personCode, providerType)
+      check = check + checkProviderType(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet', row, personCode, providerType)
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
-  verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Waste disposal sheet', 'Please check manually']])
-  verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, 'Expired drug sheet', 'Please check manually']])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  check.append([mainOrg, mainSr, mainTsp, 'Waste disposal sheet', 'Please check manually'])
+  check.append([mainOrg, mainSr, mainTsp, 'Expired drug sheet', 'Please check manually'])
+  return check
 
 def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   vilData = data['All_villages']['data']
@@ -1450,8 +1428,8 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
           checkStr = f"row - {row} | Incomplete data - DOT section"
           check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
 
-      checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
-      checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
+      check = check + checkRpPeriod(verifyFindingSheet, mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', row, rpMth, rpYr)
+      check = check + checkVC(verifyFindingSheet, mainOrg, mainSr, mainTsp, data, nameOfSheet + ' sheet',row,vc,rhc,sc,vname)
       try:
         if (providerType == 'ICMV-V' or providerType == 'ICMV-W' or providerType == 'GP') and org != 'NMCP' and org != 'NMCP/URC' and org != 'URC/NMCP':
           providerPostCode = rpBy[:-2]
@@ -1468,13 +1446,12 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
         checkStr = f"row - {row} | Person code not found in All provider sheet ({rpBy})"
         check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
       
-    if len(check) > 0:
-      verifyFindingSheet.append_rows(check)
-    else:
-      verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK']])
+    if len(check) == 0:
+      check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', 'OK'])
   else:
     checkStr = "No data"
-    verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr]])
+    check.append([mainOrg, mainSr, mainTsp, nameOfSheet + ' sheet', checkStr])
+  return check
 
 def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, ddRule, nRule, dRule):
   for sheetName in allData:
@@ -1572,10 +1549,9 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                   checkStr = apPerson + " | " + apPost + " | " + checkStr
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
 
-    if len(check) > 0:      
-        verifyFindingSheet.append_rows(check)
-    else:
-        verifyFindingSheet.append_rows([[mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK']])
+    if len(check) == 0:
+        check.append([mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK'])
+  return check
 
 def list_of_lists_to_list_of_dicts(list_of_lists):
     keys = list_of_lists[0]
@@ -1795,30 +1771,30 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
     for ruleItem in ruleList:
       ddRule[dvRule['Target Sheet']][heading]['list'].append(ruleItem[0])
 
-  checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp,sheetList, ddRule, nRule, dRule)
+  verifyFindingSheet.append_row(checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp,sheetList, ddRule, nRule, dRule))
 
-  checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
-  checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList)
+  verifyFindingSheet.append_row(checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_row(checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
