@@ -1625,7 +1625,8 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   verificationFile = gc.open_by_url(url_of_verification_file)
   verifyFindingSheet = verificationFile.worksheet(sh_name)
   verifyFindingSheet.clear()
-  verifyFindingSheet.update(values = [["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]], range_name = "A1:E1")
+  verifyFindingSheet.append_rows([["Last verify at", "", "Last successful verify at", "", "Status"],["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
+  # verifyFindingSheet.update(values = [["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]], range_name = "A1:E1")
 
   reportFile = gc.open_by_url(url_of_report_file)
   reportSheetList = reportFile.worksheets()
