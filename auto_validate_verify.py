@@ -1636,7 +1636,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   tmpSet = {}
   for tmpData in reportData:
     shName = tmpData['range'].split("!")[0]
-    print(shName)
+    # print(shName)
     tmpSet[shName] = tmpData['values']
   
   # print(tmpSet.keys())
