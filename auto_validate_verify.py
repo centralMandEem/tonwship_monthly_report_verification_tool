@@ -1592,6 +1592,10 @@ def getSheetData(service, url):
   return data
     
 def validata_or_verify_report(service_account_info, url_of_report_file, url_of_verification_file, sh_name):
+  keepVar = ["service_account_info", "url_of_report_file", "url_of_verification_file", "sh_name"]
+  for var_name in list(globals().keys()):
+    if var_name not in keepVar:
+      del globals()[var_name]
   # -----------------------------------------------------------------------------
   # function call
   # fixTool
