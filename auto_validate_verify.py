@@ -1454,6 +1454,7 @@ def checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, data):
   return check
 
 def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, ddRule, nRule, dRule):
+  dvCheck = []
   for sheetName in allData:
     if sheetName != 'All_villages' and sheetName != 'All_provider':
       data = allData[sheetName]['data']
@@ -1548,10 +1549,10 @@ def checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp, allData, d
                 if sheetName == 'All_provider':
                   checkStr = apPerson + " | " + apPost + " | " + checkStr
                 check.append([mainOrg, mainSr, mainTsp, sheetName + " Sheet", checkStr])
-
     if len(check) == 0:
         check.append([mainOrg, mainSr, mainTsp, sheetName + ' Sheet', 'Dropdown, number and date validation check - OK'])
-  return check
+    dvCheck = dvCheck + check
+  return dvCheck
 
 def list_of_lists_to_list_of_dicts(list_of_lists):
     keys = list_of_lists[0]
@@ -1771,30 +1772,30 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
     for ruleItem in ruleList:
       ddRule[dvRule['Target Sheet']][heading]['list'].append(ruleItem[0])
 
-  verifyFindingSheet.append_row(checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp,sheetList, ddRule, nRule, dRule))
+  verifyFindingSheet.append_rows(checkDataValidation(verifyFindingSheet, mainOrg, mainSr, mainTsp,sheetList, ddRule, nRule, dRule))
 
-  verifyFindingSheet.append_row(checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
-  verifyFindingSheet.append_row(checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkAllVillagesSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkAllProviderSheet(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkPMO(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkPLA(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkIpcAdditional(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkGhtWsHe(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkLlinDistMassCont(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkLlinAnc(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkLlinOther(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkRecruitment(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkC19(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkIecDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkCommodityDist(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkProcurement(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkCboSupport(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkDesignDevelop(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkStudyAssessmentSurvey(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkVisit(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkTMW(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkMSS(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkTrainingProvider(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkCsg(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkCsgSmallGrant(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkIcmvOtherDisease(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
+  verifyFindingSheet.append_rows(checkPatientRecord(verifyFindingSheet, mainOrg, mainSr, mainTsp, sheetList))
