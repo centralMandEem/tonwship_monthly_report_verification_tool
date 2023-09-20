@@ -1621,7 +1621,7 @@ def validata_or_verify_report(service_account_info, url_of_report_file, url_of_v
   verificationFile = gc.open_by_url(url_of_verification_file)
   verifyFindingSheet = verificationFile.worksheet(sh_name)
   verifyFindingSheet.clear()
-  verifyFindingSheet.update("A1:E1",[["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]])
+  verifyFindingSheet.update(value = [["Organization","State/Region", "Township", "Sheet name", "Findings/Remark"]], range_name = "A1:E1")
 
   url_of_report_file = 'https://docs.google.com/spreadsheets/d/1Kdr59_aaRVp5bnEr-_rnrRbpZ_3J-CoQu5RxGfbzYYA/edit#gid=451141657'
   reportFile = gc.open_by_url(url_of_report_file)
